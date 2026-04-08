@@ -1,0 +1,101 @@
+--- Page 1 ---
+Systems and Internet Security
+Technologies
+تجميع وإعداد
+أحمد حسين
+Lecture 2
+30 September 2025
+
+--- Page 2 ---
+Lecture 2
+Insider Threat and Ransomware
+
+--- Page 3 ---
+Insider threat
+Most elusive threats to an organization comes
+from within!
+Causes:
+•
+Malicious intent (revenge)
+•
+By mistake
+•
+Negligence
+
+--- Page 4 ---
+INSIDER THREAT
+Insider threat manifestation:
+• Malicious insiders: who intentionally harm the company.
+• Negligent insiders: who inadvertently cause damage through
+carelessness.
+• Accidental insiders: who fall victims to phishing or social
+engineering attacks.
+
+--- Page 5 ---
+Preventing Insider threats
+How to prevent insider threats?
+• Technical controls such as access management and user
+behavior analytics.
+• Organizational measures like regular training and a culture of
+security awareness:
+• Encouraging employees to report suspicious activities.
+• Ensuring they understand the protocols for handling sensitive
+information.
+
+--- Page 6 ---
+Ransomware
+What is Ransomware?
+• Malicious software that
+encrypts files on a device or
+network, holding them
+hostage until a ransom is
+paid. Usually in some form
+of cryptocurrency.
+This Photo by Unknown Author is licensed under CC BY-SA
+
+--- Page 7 ---
+Double extortion
+Ransomware attackers
+often threaten to
+release sensitive stolen
+data or report you to
+regulators if the ransom
+is not paid, increasing
+the pressure to comply.
+This Photo by Unknown Author is licensed under CC BY-SA
+
+--- Page 8 ---
+How Ransomware Spreads?
+• Ransomware infiltrates into systems in the same way as other
+malicious codes do.
+• For example, using phishing emails, exploiting vulnerabilities, or
+malicious downloads.
+
+--- Page 9 ---
+How to protect against ransomware?
+• Foundational Cybersecurity Measures
+• Regular software updates. (To patch vulnerabilities)
+• Robust endpoint security solutions. (Using robust antivirus and anti-
+malware tools)
+• Educating employees about phishing. (Training employees to recognize
+phishing attempts and other threats)
+
+--- Page 10 ---
+How to protect against ransomware?
+• Specific Ransomware Countermeasures
+• Immutable storage architectures.
+• Application whitelisting:
+• Restricting administrative
+• Network segmentation
+
+--- Page 11 ---
+Advanced defense tactics
+• End-to-end encryption
+• Incident response
+• Threat hunting activities
+• Threat intelligence services
+This is an application of the Defense in Depth strategy.
+Combining general malware defenses with ransomware-
+specific tactics offers the best protection. It's not just about
+resisting attacks but also recovering quickly when they
+occur.

@@ -1,0 +1,15 @@
+{
+  "resource_name": "en_wikipedia_org_wiki_transformer__deep_learning",
+  "resource_id": "en_wikipedia_org_wiki_transformer__deep_learning",
+  "url": "https://en.wikipedia.org/wiki/Transformer_(deep_learning)",
+  "source_type": "url",
+  "upload_date": "2026-02-10T15:02:34.658390",
+  "extraction_timestamp": "2026-02-10T15:02:34.658390",
+  "processing_time_seconds": 1.16,
+  "status": "success",
+  "error_message": null,
+  "character_count": 98129,
+  "word_count": 15224,
+  "domain": "en.wikipedia.org",
+  "extracted_text_path": "C:\\Users\\Fatma PC\\HoloLearn\\utils\\output\\en_wikipedia_org_wiki_transformer__deep_learning\\en_wikipedia_org_wiki_transformer__deep_learning_text.txt"
+}

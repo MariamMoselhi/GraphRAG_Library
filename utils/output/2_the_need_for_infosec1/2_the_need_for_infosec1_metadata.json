@@ -1,0 +1,16 @@
+{
+  "resource_name": "2_the_need_for_infosec1",
+  "resource_id": "2_the_need_for_infosec1",
+  "filename": "2. The need for InfoSec[1].pdf",
+  "source_type": "pdf",
+  "upload_date": "2026-02-10T13:37:51.683198",
+  "extraction_timestamp": "2026-02-10T13:37:51.683198",
+  "file_size_bytes": 3546877,
+  "processing_time_seconds": 0.2,
+  "status": "success",
+  "error_message": null,
+  "page_count": 79,
+  "character_count": 55505,
+  "is_encrypted": false,
+  "extracted_text_path": "C:\\Users\\Fatma PC\\HoloLearn\\utils\\output\\2_the_need_for_infosec1\\2_the_need_for_infosec1_text.txt"
+}

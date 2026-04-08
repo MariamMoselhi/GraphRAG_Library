@@ -1,0 +1,16 @@
+{
+  "resource_name": "170603762v7",
+  "resource_id": "170603762v7",
+  "filename": "1706.03762v7.pdf",
+  "source_type": "pdf",
+  "upload_date": "2026-02-10T15:02:33.503128",
+  "extraction_timestamp": "2026-02-10T15:02:33.503128",
+  "file_size_bytes": 2215244,
+  "processing_time_seconds": 0.14,
+  "status": "success",
+  "error_message": null,
+  "page_count": 15,
+  "character_count": 39636,
+  "is_encrypted": false,
+  "extracted_text_path": "C:\\Users\\Fatma PC\\HoloLearn\\utils\\output\\170603762v7\\170603762v7_text.txt"
+}
