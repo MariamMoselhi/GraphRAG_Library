@@ -1,0 +1,16 @@
+{
+  "resource_name": "logistic_rgression",
+  "resource_id": "logistic_rgression",
+  "filename": "logistic_rgression.pdf",
+  "source_type": "pdf",
+  "upload_date": "2026-04-10T08:43:46.388904",
+  "extraction_timestamp": "2026-04-10T08:43:46.388904",
+  "file_size_bytes": 251912,
+  "processing_time_seconds": 0.09,
+  "status": "success",
+  "error_message": null,
+  "page_count": 24,
+  "character_count": 7607,
+  "is_encrypted": false,
+  "extracted_text_path": "f:\\Engineering files\\4th Computer\\grad\\GraphRAG\\GraphRAG_Library\\utils\\output\\logistic_rgression\\logistic_rgression_text.txt"
+}

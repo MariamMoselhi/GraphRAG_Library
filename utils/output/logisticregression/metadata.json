@@ -1,0 +1,17 @@
+{
+  "resource_name": "logisticregression",
+  "resource_id": "logisticregression",
+  "filename": "logisticregression.pptx",
+  "source_type": "pptx",
+  "upload_date": "2026-04-10T08:45:42.724929",
+  "extraction_timestamp": "2026-04-10T08:45:42.724929",
+  "file_size_bytes": 1269605,
+  "processing_time_seconds": 8.59,
+  "status": "success",
+  "error_message": null,
+  "slide_count": 49,
+  "slides_with_notes": 11,
+  "character_count": 19157,
+  "included_notes": true,
+  "extracted_text_path": "f:\\Engineering files\\4th Computer\\grad\\GraphRAG\\GraphRAG_Library\\utils\\output\\logisticregression\\text.txt"
+}

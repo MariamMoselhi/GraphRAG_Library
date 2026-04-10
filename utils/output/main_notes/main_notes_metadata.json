@@ -1,0 +1,16 @@
+{
+  "resource_name": "main_notes",
+  "resource_id": "main_notes",
+  "filename": "main_notes.pdf",
+  "source_type": "pdf",
+  "upload_date": "2026-04-10T08:34:11.206403",
+  "extraction_timestamp": "2026-04-10T08:34:11.206403",
+  "file_size_bytes": 3401557,
+  "processing_time_seconds": 0.77,
+  "status": "success",
+  "error_message": null,
+  "page_count": 227,
+  "character_count": 376775,
+  "is_encrypted": false,
+  "extracted_text_path": "f:\\Engineering files\\4th Computer\\grad\\GraphRAG\\GraphRAG_Library\\utils\\output\\main_notes\\main_notes_text.txt"
+}

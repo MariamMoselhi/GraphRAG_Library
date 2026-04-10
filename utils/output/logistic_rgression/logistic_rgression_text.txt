@@ -1,0 +1,1304 @@
+--- Page 1 ---
+
+Logistic regression
+10-701
+Machine Learning
+
+--- Page 2 ---
+Back to classification
+
+1. Instance based classifiers
+- Use observation directly (no models)
+- e.g. K nearest neighbors
+
+2. Generative:
+- build a generative statistical model
+- e.g., Bayesian networks
+
+3. Discriminative
+- directly estimate a decision rule/boundary
+- e.g., decision tree
+
+--- Page 3 ---
+Generative vs. discriminative
+classifiers
+• When using generative classifiers we relied on all points
+to learn the generative model
+• When using discriminative classifiers we mainly care
+about the boundary
+X
+Y
+Discriminative model
+X
+Y
+Generative model
+
+--- Page 4 ---
+Regression for classification
+•
+In some cases we can use linear regression for determining the
+appropriate boundary.
+•
+However, since the output is usually binary or discrete there are
+more efficient regression methods
+•
+Recall that for classification we are interested in the conditional
+probability p(y | X ; ) where  are the parameters of our model
+•
+When using regression  represents the values of our regression
+coefficients (w).
+
+--- Page 5 ---
+Regression for classification
+•
+Assume we would like to use linear regression to learn the
+parameters for p(y | X ; )
+•
+Problems?
+1
+-1
+Optimal regression
+model
+wTX  0  classify as 1
+wTX < 0  classify as -1
+
+--- Page 6 ---
+The sigmoid function
+•
+To classify using regression models
+we replace the linear function with the
+sigmoid function:
+
+•
+Using the sigmoid we set (for binary
+classification problems)
+
+g(h) 
+1
+1eh
+)
+;
+|
+(
+
+X
+y
+p
+Always between 0
+and 1
+X
+e
+X
+g
+X
+y
+p
+T
+w
+T
+1
+)
+w
+(
+)
+;
+|
+0
+(
+
+
+
+X
+e
+X
+g
+X
+y
+p
+T
+w
+T
+1
+)
+w
+(
+1
+)
+;
+|1
+(
+
+
+
+
+
+
+--- Page 7 ---
+The sigmoid function
+•
+To classify using regression models
+we replace the linear function with the
+sigmoid function:
+
+•
+Using the sigmoid we set (for binary
+classification problems)
+
+g(h) 
+1
+1eh
+)
+;
+|
+(
+
+X
+y
+p
+X
+e
+X
+g
+X
+y
+p
+T
+w
+T
+1
+)
+w
+(
+)
+;
+|
+0
+(
+
+
+
+X
+e
+X
+g
+X
+y
+p
+T
+w
+T
+1
+)
+w
+(
+1
+)
+;
+|1
+(
+
+
+
+
+
+Note that we are
+defining the
+probabilities in terms
+of p(y|X). No need to
+use Bayes rule here!
+
+--- Page 8 ---
+Logistic regression vs. Linear
+regression
+X
+e
+X
+g
+X
+y
+p
+T
+w
+T
+1
+)
+w
+(
+)
+;
+|
+0
+(
+
+
+
+X
+e
+X
+g
+X
+y
+p
+T
+w
+T
+1
+)
+w
+(
+1
+)
+;
+|1
+(
+
+
+
+
+
+
+--- Page 9 ---
+Determining parameters for logistic
+regression problems
+
+
+
+
+i
+y
+i
+y
+i
+w
+X
+g
+w
+X
+g
+w
+X
+y
+L
+)
+1
+()
+;
+(
+))
+;
+(
+1(
+)
+;
+|
+(
+• So how do we learn the parameters?
+• Similar to other regression problems
+we look for the MLE for w
+• The likelihood of the data given the
+model is:
+X
+e
+w
+X
+g
+X
+y
+p
+T
+w
+1
+)
+;
+(
+)
+;
+|
+0
+(
+
+
+
+X
+e
+w
+X
+g
+X
+y
+p
+T
+w
+1
+)
+;
+(
+1
+)
+;
+|1
+(
+
+
+
+
+
+Defining a new
+function, g
+
+--- Page 10 ---
+Solving logistic regression
+problems
+
+
+
+
+
+
+
+
+
+
+
+
+
+N
+i
+X
+w
+i
+N
+i
+N
+i
+T
+e
+X
+y
+w
+X
+g
+w
+X
+g
+w
+X
+g
+y
+w
+X
+g
+y
+w
+X
+g
+y
+w
+X
+y
+LL
+1
+T
+1
+)
+1
+ln(
+w
+)
+;
+(
+ln
+)
+;
+(
+)
+;
+(
+1
+ln
+)
+;
+(
+ln
+)
+1(
+))
+;
+(
+1
+ln(
+)
+;
+|
+(
+• The likelihood of the data is:
+
+• Taking the log we get:
+X
+e
+w
+X
+g
+T
+w
+1
+)
+;
+(
+
+
+X
+e
+w
+X
+g
+T
+w
+1
+)
+;
+(
+1
+
+
+
+
+
+
+i
+y
+i
+y
+i
+w
+X
+g
+w
+X
+g
+w
+X
+y
+L
+)
+1
+()
+;
+(
+))
+;
+(
+1(
+)
+;
+|
+(
+
+--- Page 11 ---
+Maximum likelihood estimation
+
+
+
+
+
+
+
+
+
+
+
+N
+i
+j
+i
+N
+i
+j
+i
+N
+i
+X
+i
+j
+w
+X
+y
+p
+y
+X
+w
+X
+g
+y
+X
+e
+X
+y
+w
+l
+w
+i
+1
+w
+T
+)}
+;
+|1
+(
+{
+))}
+;
+(
+1(
+{
+)}
+1
+ln(
+w
+{
+)
+(
+T
+Bad news: No close
+form solution!
+Good news: Concave
+function
+Taking the partial
+derivative w.r.t.
+each component of
+the w vector
+X
+e
+w
+X
+g
+T
+w
+1
+)
+;
+(
+
+
+X
+e
+w
+X
+g
+T
+w
+1
+)
+;
+(
+1
+
+
+
+
+--- Page 12 ---
+Gradient ascent
+z=x(y-g(w;x))
+w
+Slope = z/ w
+z
+w
+• Going in the direction to the slope will lead to a larger z
+• But not too much, otherwise we would go beyond the
+optimal w
+
+--- Page 13 ---
+Gradient descent
+z=(f(w)-y)2
+w
+Slope = z/ w
+z
+w
+• Going in the opposite direction to the slope will lead to
+a smaller z
+• But not too much, otherwise we would go beyond the
+optimal w
+
+--- Page 14 ---
+Gradient ascent for logistic
+regression
+
+
+
+
+N
+i
+j
+i
+j
+w
+X
+g
+y
+X
+w
+l
+w
+1
+))}
+;
+(
+1(
+{
+)
+(
+We use the gradient to adjust the value of w:
+
+Where  is a (small) constant
+
+
+
+
+N
+i
+j
+i
+j
+w
+X
+g
+y
+X
+w
+1
+))}
+;
+(
+1(
+{
+
+
+--- Page 15 ---
+Algorithm for logistic regression
+1. Chose 
+2. Start with a guess for w
+3. For all j set
+
+4. If no improvement for
+
+stop. Otherwise go to step 3
+Example
+
+
+
+
+N
+i
+j
+i
+j
+w
+X
+g
+y
+X
+w
+1
+))}
+;
+(
+1(
+{
+
+
+
+
+
+
+N
+i
+w
+X
+g
+y
+w
+X
+g
+y
+w
+X
+y
+LL
+1
+)
+;
+(
+ln
+)
+1(
+))
+;
+(
+1
+ln(
+)
+;
+|
+(
+
+--- Page 16 ---
+Regularization
+•
+Similar to other data estimation problems, we may not have enough
+samples to learn good models for logistic regression classification
+•
+One way to overcome this is to ‘regularize’ the model, impose
+additional constraints on the parameters we are fitting.
+•
+For example, lets assume that wi
+comes from a Gaussian
+distribution with mean 0 and variance 2 (where 2 is a user defined
+parameter): wj~N(0, 2)
+•
+In that case we have a prior on the parameters and so:
+
+)
+(
+)
+;
+|1
+(
+)
+|
+,1
+(
+
+p
+X
+y
+p
+X
+y
+p
+
+
+
+
+--- Page 17 ---
+Regularization
+•
+If we regularize the parameters we need to take the prior into
+account when computing the posterior for our parameters
+
+•
+Here we use a Gaussian model for the prior.
+•
+Thus, the log likelihood changes to :
+
+•
+And the new update rule (after taking the derivative w.r.t. wi) is:
+
+
+
+
+
+
+j
+N
+i
+X
+w
+i
+w
+e
+X
+y
+X
+w
+y
+LL
+i
+T
+2
+1
+T
+2
+)
+(
+)
+1
+ln(
+w
+)
+|
+;
+(
+
+2
+1
+))}
+;
+(
+1(
+{
+
+
+j
+N
+i
+j
+i
+j
+w
+X
+g
+y
+X
+w
+
+
+
+
+Assuming mean
+of 0 and
+removing terms
+that are not
+dependent on w
+The variance of
+our prior model
+Also known as the MAP
+estimate
+)
+(
+)
+;
+|1
+(
+)
+|
+,1
+(
+
+p
+X
+y
+p
+X
+y
+p
+
+
+
+
+--- Page 18 ---
+Regularization
+•
+There are many other ways to regularize logistic regression
+•
+The Gaussian model leads to an L2 regularization (we are trying to
+minimize the square value of w)
+•
+Another popular regularization is an L1 which tries to minimize |w|
+
+--- Page 19 ---
+Logistic regression for more
+than 2 classes
+•
+Logistic regression can be used to classify data from more than 2
+classes. Assume we have k classes then:
+•
+for i<k we set
+
+where
+
+And for k we have
+)
+w
+(
+)
+(
+)
+;
+|
+(
+T
+i
+1
+0
+X
+g
+x
+w
+x
+w
+g
+X
+i
+y
+p
+d
+i
+
+
+
+
+
+d
+i
+k
+j
+z
+i
+x
+w
+x
+w
+z
+e
+z
+g
+j
+i
+
+
+
+
+
+
+
+
+1
+0
+1
+)
+(
+
+
+
+
+
+1
+)
+;
+|
+(
+k
+j
+z j
+e
+X
+k
+y
+p
+
+
+
+
+
+
+
+
+1
+)
+;
+|
+(
+1
+)
+;
+|
+(
+k
+i
+X
+i
+y
+p
+X
+k
+y
+p
+
+
+--- Page 20 ---
+Logistic regression for more
+than 2 classes
+•
+Logistic regression can be used to classify data from more than 2
+classes. Assume we have k classes then:
+•
+for i<k we set
+
+where
+
+And for k we have
+)
+w
+(
+)
+(
+)
+;
+|
+(
+T
+i
+1
+0
+X
+g
+x
+w
+x
+w
+g
+X
+i
+y
+p
+d
+i
+
+
+
+
+
+d
+i
+k
+j
+z
+i
+x
+w
+x
+w
+z
+e
+z
+g
+j
+i
+
+
+
+
+
+
+
+
+1
+0
+1
+)
+(
+
+
+
+
+
+1
+)
+;
+|
+(
+k
+j
+z j
+e
+X
+k
+y
+p
+
+
+
+
+
+
+
+
+1
+)
+;
+|
+(
+1
+)
+;
+|
+(
+k
+i
+X
+i
+y
+p
+X
+k
+y
+p
+
+Binary logistic regression is a
+special case of this rule
+
+--- Page 21 ---
+Update rule for logistic
+regression with multiple classes
+
+
+
+
+
+N
+i
+m
+j
+i
+j
+m
+w
+X
+m
+y
+p
+y
+X
+w
+l
+w
+i
+1
+)}
+;
+|
+(
+)
+(
+{
+)
+(
+
+Where (yi)=1 if yi=m
+and (yi)=0 otherwise
+The update rule becomes:
+
+
+
+
+
+N
+i
+m
+j
+i
+j
+m
+j
+m
+w
+X
+m
+y
+p
+y
+X
+w
+i
+1
+)}
+;
+|
+(
+)
+(
+{
+
+
+--- Page 22 ---
+Data transformation
+•
+Similar to what we did with linear regression we can extend logistic
+regression to other transformations of the data
+
+•
+As before, we are free to choose the basis functions
+))
+(
+)
+(
+)
+;
+|1
+(
+1
+0
+X
+w
+X
+w
+g
+w
+X
+y
+p
+d
+d
+
+
+
+
+
+--- Page 23 ---
+Important points
+•
+Advantage of logistic regression over linear regression for
+classification
+•
+Sigmoid function
+•
+Gradient ascent / descent
+•
+Regularization
+•
+Logistic regression for multiple classes
+
+--- Page 24 ---
+Logistic regression
+•
+The name comes from the logit transformation:
+d
+i
+k
+i
+x
+w
+x
+w
+z
+g
+z
+g
+X
+k
+y
+p
+X
+i
+y
+p
+
+
+
+1
+0
+)
+(
+)
+(
+log
+)
+;
+|
+(
+)
+;
+|
+(
+log
+
