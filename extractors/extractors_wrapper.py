@@ -94,6 +94,15 @@ class SimpleExtractorWrapper:
             print(f"URL extraction failed: {e}")
             return ""
 
+    def extract_text(self, file_path: str) -> str:
+        """Extract text from plain text file"""
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                return f.read()
+        except Exception as e:
+            print(f"Text file extraction failed: {e}")
+            return ""
+
     def extract_auto(self, file_path: str) -> str:
         """Auto-detect file type and extract text"""
         ext = Path(file_path).suffix.lower()
@@ -104,6 +113,8 @@ class SimpleExtractorWrapper:
             ".doc": self.extract_docx,
             ".pptx": self.extract_pptx,
             ".ppt": self.extract_pptx,
+            ".txt": self.extract_text,
+            ".md": self.extract_text,
             ".mp3": self.extract_audio,
             ".wav": self.extract_audio,
             ".m4a": self.extract_audio,
