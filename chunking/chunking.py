@@ -13,10 +13,8 @@ from __future__ import annotations
 
 from typing import List
 
-# ── re-export the public dataclass so users can do: from chunking import Chunk
 from chunk_base import Chunk, BaseChunker
 
-# ── import all concrete chunkers from the internal implementations module
 from chunk_implementations import (
     FixedSizeChunker,
     SentenceChunker,
