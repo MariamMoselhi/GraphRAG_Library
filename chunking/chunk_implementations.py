@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from typing import List, Optional
 
-from chunk_base import BaseChunker, Chunk
+from .chunk_base import BaseChunker, Chunk
 
 
 

@@ -13,9 +13,9 @@ from __future__ import annotations
 
 from typing import List
 
-from chunk_base import Chunk, BaseChunker
+from .chunk_base import Chunk, BaseChunker
 
-from chunk_implementations import (
+from .chunk_implementations import (
     FixedSizeChunker,
     SentenceChunker,
     ParagraphChunker,

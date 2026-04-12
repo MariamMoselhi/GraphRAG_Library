@@ -4,7 +4,7 @@ import re
 from dataclasses import dataclass, field
 from typing import List, Optional
 
-from text_cleaner import TextCleaner
+from .text_cleaner import TextCleaner
 
 
 # CHUNK DATACLASS
