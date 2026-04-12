@@ -8,10 +8,6 @@
 
 ## Overview — The Four-File Layout
 
-The original single `chunking.py` (977 lines) was split into four files with
-clear, non-overlapping responsibilities. The dependency arrow points downward:
-nothing in a lower layer imports from a higher one.
-
 ```
 chunking.py                ← the ONLY file users import from
     │
