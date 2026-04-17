@@ -1,0 +1,34 @@
+# Core
+numpy
+python-dotenv
+
+# Embeddings / vector search
+sentence-transformers
+faiss-cpu
+torch
+
+# Graph extraction
+anthropic
+spacy
+
+# Document and web extractors
+PyMuPDF
+python-docx
+python-pptx
+requests
+beautifulsoup4
+
+# Audio / video extractors
+groq
+
+# OCR / equation recognition
+easyocr
+Pillow
+pix2tex
+
+# Windows-only optional dependency for .ppt -> .pptx conversion
+pywin32
+
+# Note:
+# This project also requires FFmpeg installed on your system PATH
+# for audio/video processing (not a pip package).
