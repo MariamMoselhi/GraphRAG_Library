@@ -208,7 +208,10 @@ class GraphStore:
                     """,
                     records=records,
                 )
-            written += len(batch)
+            # Count de-duplicated records, not the raw batch.
+            # len(batch) over-counts when duplicate node_ids appear in
+            # the same batch (those are merged into one record before write).
+            written += len(records)
 
         return written
 

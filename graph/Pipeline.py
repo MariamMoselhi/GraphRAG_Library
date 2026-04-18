@@ -231,6 +231,7 @@ class Pipeline:
         graph_store           : GraphStore,
         extract_cross_doc     : bool = True,
         show_progress         : bool = True,
+        schema_already_exists : bool = False,
     ) -> "Pipeline":
         """
         Construct a Pipeline from pre-built component instances.
@@ -238,9 +239,13 @@ class Pipeline:
         Useful when you want fine-grained control over each component,
         or when you already hold an open GraphStore connection.
 
-        Note: graph_store.init_schema() is NOT called automatically here —
-        call it yourself before passing the store in, or ensure the schema
-        already exists.
+        Args
+        ────
+        schema_already_exists : Set to True ONLY if you have previously called
+                                graph_store.init_schema() and are certain the
+                                constraints and vector index are in place.
+                                Defaults to False — init_schema() is called for
+                                you, which is always safe (it is idempotent).
         """
         instance = object.__new__(cls)
         instance._node_extractor         = node_extractor
@@ -248,6 +253,10 @@ class Pipeline:
         instance._store                  = graph_store
         instance._extract_cross_doc      = extract_cross_doc
         instance._show_progress          = show_progress
+
+        if not schema_already_exists:
+            graph_store.init_schema()
+
         return instance
 
     # ── Main entry point ──────────────────────────────────────────────────────
@@ -303,24 +312,66 @@ class Pipeline:
         self._log(f"    → {len(nodes)} unique nodes extracted.")
 
         # ── Step 2: Build global node_id_map ─────────────────────────────────
-        #    name.lower() → node_id  (for relationship resolution)
-        node_id_map: Dict[str, str] = {
-            node.name.lower(): node.node_id for node in nodes
+        #
+        # PRIMARY key: name.lower()  (what RelationshipExtractor.resolve uses)
+        # The extractor resolves names with node_id_map.get(name.lower()), so
+        # the map must stay name-keyed.  To prevent cross-type collision we
+        # apply a priority policy: more specific types (Model, Method …) win
+        # over generic fallbacks (Concept).  Collisions are logged as warnings.
+        # Aliases use setdefault so they never overwrite a canonical name entry.
+
+        _TYPE_PRIORITY: Dict[str, int] = {
+            t: i for i, t in enumerate([
+                "Model", "Method", "Algorithm", "Framework", "Dataset",
+                "Metric", "Task", "Theory", "Formula", "System",
+                "Component", "Signal", "Author", "Institution", "Concept",
+            ])
         }
-        # Also index aliases for fuzzy resolution
+
+        # node_id_map : name.lower() → node_id
+        # _map_meta   : name.lower() → (entity_type, node_id) — for collision tracking
+        node_id_map: Dict[str, str]   = {}
+        _map_meta  : Dict[str, tuple] = {}
+
+        for node in nodes:
+            key = node.name.lower()
+            if key in _map_meta:
+                existing_type, existing_id = _map_meta[key]
+                if existing_id != node.node_id:
+                    # True collision — same surface name, different node_ids
+                    incumbent_prio  = _TYPE_PRIORITY.get(existing_type,   99)
+                    challenger_prio = _TYPE_PRIORITY.get(node.entity_type, 99)
+                    if challenger_prio < incumbent_prio:
+                        node_id_map[key] = node.node_id
+                        _map_meta[key]   = (node.entity_type, node.node_id)
+                    warnings.warn(
+                        f"node_id_map collision on name '{key}': "
+                        f"{existing_type}({existing_id}) vs "
+                        f"{node.entity_type}({node.node_id}). "
+                        f"Keeping {_map_meta[key][0]} entry."
+                    )
+            else:
+                node_id_map[key] = node.node_id
+                _map_meta[key]   = (node.entity_type, node.node_id)
+
+        # Aliases — never overwrite a canonical name entry
         for node in nodes:
             for alias in node.aliases:
                 node_id_map.setdefault(alias.lower(), node.node_id)
 
         # ── Step 3: Write nodes to Neo4j ──────────────────────────────────────
+        # Fail fast: a partial node write leaves the graph in an inconsistent
+        # state (relationships reference node_ids that do not exist).
+        # Re-raise so the caller can decide whether to retry or roll back.
         self._log("[2/5] Writing nodes to Neo4j...")
         try:
             stats.nodes_written = self._store.upsert_nodes(nodes)
             self._log(f"    → {stats.nodes_written} node(s) written.")
         except Exception as exc:
-            msg = f"Node write failed: {exc}"
-            warnings.warn(msg)
-            stats.errors.append(msg)
+            stats.elapsed_seconds = time.time() - t_start
+            raise RuntimeError(
+                f"Pipeline aborted: node write to Neo4j failed after "                f"{stats.nodes_extracted} node(s) were extracted. "                f"No relationships have been written. Reason: {exc}"
+            ) from exc
 
         # ── Step 4: Build per-chunk node index ───────────────────────────────
         #    chunk_index → List[ExtractedNode] that came from that chunk
@@ -388,14 +439,18 @@ class Pipeline:
         self._log(f"    → {len(all_relationships)} unique relationship(s) after deduplication.")
 
         # ── Step 7: Write relationships to Neo4j ─────────────────────────────
+        # Fail fast: all nodes are already committed at this point, so a
+        # partial relationship write leaves dangling/orphaned edges.
+        # Re-raise so the caller can retry the write or inspect the failure.
         self._log("[5/5] Writing relationships to Neo4j...")
         try:
             stats.relationships_written = self._store.upsert_relationships(all_relationships)
             self._log(f"    → {stats.relationships_written} relationship(s) written.")
         except Exception as exc:
-            msg = f"Relationship write failed: {exc}"
-            warnings.warn(msg)
-            stats.errors.append(msg)
+            stats.elapsed_seconds = time.time() - t_start
+            raise RuntimeError(
+                f"Pipeline aborted: relationship write to Neo4j failed. "                f"{stats.nodes_written} node(s) were already committed. "                f"Retry upsert_relationships() with the extracted data. "                f"Reason: {exc}"
+            ) from exc
 
         # ── Done ──────────────────────────────────────────────────────────────
         stats.elapsed_seconds = time.time() - t_start

@@ -161,8 +161,21 @@ class NodeExtractor(BaseNodeExtractor):
         source = chunk.metadata.get("source", "unknown")
         cache_sig = self._cache_signature()
 
-        # Fast path: lock-free lookup first.
-        cached_entry = self._cache.get(text, {}).get(cache_sig)
+        # ── Thread-safe cache lookup ──────────────────────────────────────────
+        # Both the read and the write are guarded by the same lock so no
+        # worker can observe a partially-constructed cache entry.
+        #
+        # To avoid holding the lock during the expensive spaCy + LLM calls
+        # we use a two-phase pattern:
+        #   Phase 1 (under lock)  — check if a result is already cached.
+        #   Phase 2 (lock-free)   — compute spaCy + LLM if needed.
+        #   Phase 3 (under lock)  — write result, but only if no other
+        #                           worker wrote first (setdefault).
+
+        # Phase 1 — locked read
+        with self._cache_lock:
+            cached_entry = self._cache.get(text, {}).get(cache_sig)
+
         if cached_entry is not None:
             return self._build_nodes_from_entities(
                 entities=cached_entry.get("entities", []),
@@ -170,13 +183,13 @@ class NodeExtractor(BaseNodeExtractor):
                 chunk_id=chunk.chunk_id,
             )
 
-        # Compute outside lock to avoid blocking all workers during API/network calls.
-        spacy_items = self._extract_with_spacy(text)
-        llm_items   = self._extract_with_llm(text)
-        merged      = self._merge_entity_sets(spacy_items, llm_items)
+        # Phase 2 — expensive work outside the lock
+        spacy_items      = self._extract_with_spacy(text)
+        llm_items        = self._extract_with_llm(text)
+        merged           = self._merge_entity_sets(spacy_items, llm_items)
         entities_payload = self._normalize_cache_entities(merged)
 
-        # Double-check locking to avoid race overwrites.
+        # Phase 3 — locked write (setdefault: first writer wins, others discard)
         with self._cache_lock:
             cache_bucket = self._cache.setdefault(text, {})
             cache_bucket.setdefault(cache_sig, {"entities": entities_payload})

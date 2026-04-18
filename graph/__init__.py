@@ -34,7 +34,24 @@ from .base import (
 from .llm_backend import LLMBackend
 from .node_extractor import NodeExtractor
 from .relationships_extractor import RelationshipExtractor
-from .graph_store import GraphStore
+
+# GraphStore is intentionally NOT imported here at module load time.
+# graph_store.py imports neo4j at the top level, so an eager import would
+# make neo4j a hard dependency for every `from graph import ...` statement,
+# even in extraction-only environments that have no Neo4j.
+#
+# Instead, GraphStore is exposed via __getattr__ so it is only imported
+# (and neo4j validated) when the caller actually accesses it:
+#
+#     from graph import GraphStore        # triggers lazy import
+#     from graph import NodeExtractor     # neo4j never touched
+
+def __getattr__(name: str):
+    if name == "GraphStore":
+        from .graph_store import GraphStore  # noqa: PLC0415
+        return GraphStore
+    raise AttributeError(f"module 'graph' has no attribute {name!r}")
+
 
 __all__ = [
     # Data models
@@ -48,6 +65,6 @@ __all__ = [
     # Implementations
     "NodeExtractor",
     "RelationshipExtractor",
-    # Storage
+    # Storage (lazy — neo4j imported only on first access)
     "GraphStore",
 ]
