@@ -14,9 +14,9 @@ Usage (minimal)
     from pipeline import Pipeline
 
     pipeline = Pipeline(
-        neo4j_uri      = "bolt://localhost:7687",
+        neo4j_uri      = "neo4j://127.0.0.1:7687",
         neo4j_user     = "neo4j",
-        neo4j_password = "password",
+        neo4j_password = "neo4j1234",
         groq_api_key   = "gsk_...",
         embedding_fn   = my_embed_fn,   # Callable[[List[str]], np.ndarray]
     )
@@ -30,7 +30,7 @@ Usage (advanced — bring your own components)
     from pipeline import Pipeline
 
     llm   = LLMBackend(api_key="gsk_...", model="llama-3.3-70b-versatile", batch_size=4)
-    store = GraphStore(uri="bolt://localhost:7687", user="neo4j", password="password")
+    store = GraphStore(uri="neo4j://127.0.0.1:7687", user="neo4j", password="neo4j1234")
     store.init_schema()
 
     pipeline = Pipeline.from_components(
@@ -48,9 +48,9 @@ Incremental ingestion (single chunk)
 Environment variables
 ─────────────────────
     GROQ_API_KEY   — Groq API key (used when api_key is not passed directly)
-    NEO4J_URI      — bolt://localhost:7687
+    NEO4J_URI      — neo4j://127.0.0.1:7687 (used when neo4j_uri is not passed directly)
     NEO4J_USER     — neo4j
-    NEO4J_PASSWORD — (your password)
+    NEO4J_PASSWORD — neo4j1234
 """
 from __future__ import annotations
 
@@ -132,7 +132,7 @@ class Pipeline:
 
     Args (default constructor)
     ──────────────────────────
-    neo4j_uri           : Neo4j Bolt URI. Falls back to NEO4J_URI env var.
+    neo4j_uri           : Neo4j neo4j URI. Falls back to NEO4J_URI env var.
     neo4j_user          : Neo4j username. Falls back to NEO4J_USER env var.
     neo4j_password      : Neo4j password. Falls back to NEO4J_PASSWORD env var.
     neo4j_database      : Neo4j database (default "neo4j").
@@ -182,9 +182,9 @@ class Pipeline:
             )
 
         # Resolve connection params from env if not provided
-        uri      = neo4j_uri      or os.environ.get("NEO4J_URI",      "bolt://localhost:7687")
+        uri      = neo4j_uri      or os.environ.get("NEO4J_URI",      "neo4j://127.0.0.1:7687")
         user     = neo4j_user     or os.environ.get("NEO4J_USER",     "neo4j")
-        password = neo4j_password or os.environ.get("NEO4J_PASSWORD", "")
+        password = neo4j_password or os.environ.get("NEO4J_PASSWORD", "neo4j1234")
 
         llm = LLMBackend(
             api_key    = groq_api_key,

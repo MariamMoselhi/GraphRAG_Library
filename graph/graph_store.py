@@ -23,7 +23,7 @@ Usage
     from graph.graph_store import GraphStore
     from graph import NodeExtractor, RelationshipExtractor
 
-    store = GraphStore(uri="bolt://localhost:7687", user="neo4j", password="...")
+    store = GraphStore(uri="neo4j://127.0.0.1:7687", user="neo4j", password="neo4j1234")
     store.init_schema()                 # create constraints + vector index once
 
     store.upsert_nodes(nodes)           # List[ExtractedNode]
@@ -72,7 +72,7 @@ class GraphStore:
 
     Args
     ----
-    uri           : Neo4j Bolt URI  (e.g. "bolt://localhost:7687")
+    uri           : Neo4j neo4j URI  (e.g. "neo4j://127.0.0.1:7687")
     user          : Neo4j username  (default "neo4j")
     password      : Neo4j password
     database      : Neo4j database  (default "neo4j")
@@ -84,7 +84,7 @@ class GraphStore:
         self,
         uri          : str,
         user         : str  = "neo4j",
-        password     : str  = "",
+        password     : str  = "neo4j1234",
         database     : str  = "neo4j",
         embedding_dim: int  = DEFAULT_EMBEDDING_DIM,
         batch_size   : int  = 256,
