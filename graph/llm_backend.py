@@ -42,7 +42,7 @@ except ImportError:
 
 _DEFAULT_MODEL       = "llama-3.3-70b-versatile"
 _GROQ_URL            = "https://api.groq.com/openai/v1/chat/completions"
-_DEFAULT_MAX_TOKENS  = 1024
+_DEFAULT_MAX_TOKENS  = 3000
 _DEFAULT_TEMPERATURE = 0.0
 _DEFAULT_BATCH_SIZE  = 1          # chunks per API call
 _RETRY_SLEEP_SECONDS = 15.0
