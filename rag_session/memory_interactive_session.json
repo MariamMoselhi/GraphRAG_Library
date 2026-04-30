@@ -1,0 +1,21 @@
+{
+  "session_id": "interactive_session",
+  "next_id": 1,
+  "summary": "",
+  "turns": [
+    {
+      "turn_id": 0,
+      "user_query": "what is more important business or security?",
+      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\graphrag_library\\GraphRAG_Library\\utils\\output\\2_the_need_for_infosec1\\2_the_need_for_infosec1_text.txt)\nSelf-Assessment\n• Consider this statement:\n",
+      "retrieved_chunks": [
+        "124"
+      ],
+      "timestamp": "2026-04-30T15:26:34.337030",
+      "query_intent": "comparative",
+      "entities": [
+        "Business",
+        "Security"
+      ]
+    }
+  ]
+}
