@@ -1,0 +1,19 @@
+{
+  "session_id": "pipeline_test",
+  "next_id": 1,
+  "summary": "",
+  "turns": [
+    {
+      "turn_id": 0,
+      "user_query": "What is gradient descent?",
+      "ai_response": "Gradient descent is an optimisation algorithm...",
+      "retrieved_chunks": [],
+      "timestamp": "2026-04-25T14:55:02.879966",
+      "query_intent": "factual",
+      "entities": [
+        "Gradient Descent",
+        "Learning Rate"
+      ]
+    }
+  ]
+}
