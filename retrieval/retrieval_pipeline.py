@@ -64,8 +64,8 @@ from .retrieval_context import (
 from .retrieval_logger import RetrievalLogger
 from .memory_store import MemoryStore
 from .query_cache import QueryCache
-from .faiss_store import FAISSStore
 from .query_processor import QueryProcessor
+from vectordb.faiss_store import FaissVectorStore
 from .query_engine import QueryEngine
 from .bm25_retriever import BM25Retriever
 from .vector_retriever import VectorRetriever
@@ -141,7 +141,7 @@ class RetrievalPipeline:
         self.show_graph_viz= show_graph_viz
         self.verbose       = verbose
 
-        # ── Shared infrastructure ─────────────────────────────────────────────
+        # Shared infrastructure 
         self.logger = RetrievalLogger(verbose=verbose)
 
         self.memory = MemoryStore(
@@ -157,7 +157,7 @@ class RetrievalPipeline:
             verbose              = verbose,
         )
 
-        # ── Retrievers ────────────────────────────────────────────────────────
+        # Retrievers
         self.query_processor = QueryProcessor(
             whisper_api_key = whisper_api_key,
             memory_store    = self.memory,
@@ -183,10 +183,10 @@ class RetrievalPipeline:
                 self.logger.warn(f"BM25 load failed ({e}) — keyword retrieval disabled")
 
         # Vector (FAISS)
-        self.faiss : Optional[FAISSStore] = None
+        self.faiss : Optional[FaissVectorStore] = None
         if faiss_dir and os.path.exists(os.path.join(faiss_dir, "faiss.index")):
             try:
-                self.faiss = FAISSStore.load(faiss_dir, embedding_model, verbose=verbose)
+                self.faiss = FaissVectorStore.load(faiss_dir)
             except Exception as e:
                 self.logger.warn(f"FAISS load failed ({e}) — vector retrieval disabled")
 
@@ -225,7 +225,7 @@ class RetrievalPipeline:
             verbose         = verbose,
         )
 
-    # ── Main entry point ──────────────────────────────────────────────────────
+    # Main entry point 
 
     def run(
         self,
@@ -260,7 +260,7 @@ class RetrievalPipeline:
             top_k_graph  = top_k_graph  or self.top_k_graph,
         )
 
-        # ── Adaptive retry on FAIL ────────────────────────────────────────────
+        # Adaptive retry on FAIL 
         if (
             self.enable_retry
             and result.verdict == GraderVerdict.FAIL
@@ -280,13 +280,13 @@ class RetrievalPipeline:
             )
             result.trace = retry_trace
 
-        # ── Final trace summary ────────────────────────────────────────────────
+        # Final trace summary 
         result.trace = trace
         self.logger.print_trace(trace)
 
         return result
 
-    # ── Internal single-pass run ──────────────────────────────────────────────
+    # Internal single-pass run 
 
     def _run_once(
         self,
@@ -298,20 +298,20 @@ class RetrievalPipeline:
     ) -> GradedResult:
         """Single pass of the retrieval pipeline (called for initial + retry)."""
 
-        # ── Stage 1: Query processing ─────────────────────────────────────────
+        # Stage 1: Query processing 
         rep = self.query_processor.process(user_input, trace=trace)
 
-        # ── Stage 2: Query engine (intent, entities, embedding) ───────────────
+        # Stage 2: Query engine (intent, entities, embedding)
         rep = self.query_engine.process(rep, trace=trace)
 
-        # ── Stage 3: Cache check (after embedding is available) ───────────────
+        # Stage 3: Cache check (after embedding is available)
         if rep.embedding is not None:
             cached = self.cache.get(rep.embedding)
             if cached is not None:
                 trace.cache_hit = True
                 return cached
 
-        # ── Stage 4: Parallel retrieval ───────────────────────────────────────
+        # Stage 4: Parallel retrieval
         bm25_results   = []
         vector_results = []
 
@@ -329,14 +329,14 @@ class RetrievalPipeline:
             rep, top_k=top_k_graph, trace=trace
         )
 
-        # ── Stage 5: Graph visualisation ──────────────────────────────────────
+        # Stage 5: Graph visualisation 
         if self.show_graph_viz:
             self.graph_visualizer.print_graph(
                 traversal      = traversal,
                 query_entities = rep.entities,
             )
 
-        # ── Stage 6: Hybrid fusion (RRF) ──────────────────────────────────────
+        # Stage 6: Hybrid fusion (RRF) 
         fused = self.hybrid.fuse(
             bm25_results   = bm25_results,
             vector_results = vector_results,
@@ -345,21 +345,21 @@ class RetrievalPipeline:
             trace          = trace,
         )
 
-        # ── Stage 7: Reranking ────────────────────────────────────────────────
+        # Stage 7: Reranking 
         reranked = self.reranker.rerank(
             query   = rep.normalised_text,
             results = fused,
             trace   = trace,
         )
 
-        # ── Stage 8: Grader ───────────────────────────────────────────────────
+        # Stage 8: Grader 
         result = self.grader.grade(
             reranked = reranked,
             rep      = rep,
             trace    = trace,
         )
 
-        # ── Stage 9: Cache store (only on PASS/PARTIAL) ───────────────────────
+        # Stage 9: Cache store (only on PASS/PARTIAL)
         if (
             rep.embedding is not None
             and result.verdict in (GraderVerdict.PASS, GraderVerdict.PARTIAL)
@@ -368,7 +368,7 @@ class RetrievalPipeline:
 
         return result
 
-    # ── Memory management ─────────────────────────────────────────────────────
+    # Memory management 
 
     def record_turn(
         self,
@@ -407,7 +407,7 @@ class RetrievalPipeline:
             entities         = entities,
         )
 
-    # ── Index building helpers ────────────────────────────────────────────────
+    # Index building helpers 
 
     def build_indices(self, chunks: list, save_dir: str = ".") -> None:
         """
@@ -434,8 +434,14 @@ class RetrievalPipeline:
         # FAISS
         if self.faiss is None and self.vector_retriever is None:
             emb_model = self.query_engine.embedding_model
-            self.faiss = FAISSStore(emb_model, verbose=self.verbose)
-            self.faiss.build_from_chunks(chunks)
+            # Embed all chunks and store vectors in chunk.metadata["embedding"]
+            texts = [c.text for c in chunks]
+            vectors = emb_model.encode(texts)
+            for chunk, vec in zip(chunks, vectors):
+                chunk.metadata["embedding"] = vec
+            # Build FaissVectorStore using the project's canonical implementation
+            self.faiss = FaissVectorStore(dim=emb_model.dimension)
+            self.faiss.add_chunks(chunks)
             self.faiss.save(save_dir)
             self.vector_retriever = VectorRetriever(
                 self.faiss, logger=self.logger, verbose=self.verbose
