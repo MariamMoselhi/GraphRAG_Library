@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+import pickle
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "chunking"))
 
@@ -34,9 +35,10 @@ class FaissVectorStore(BaseVectorStore):
     dim : Embedding dimensionality (must match model.dimension).
     """
 
-    def __init__(self, dim: int):
-        self.dim    = dim
-        self.index  = faiss.IndexFlatIP(dim)
+    def __init__(self, dim: int, verbose: bool = True):
+        self.dim     = dim
+        self.verbose = verbose
+        self.index   = faiss.IndexFlatIP(int(dim))
         self._chunks: List[Chunk] = []
 
     def add_chunks(self, chunks: List[Chunk]) -> None:
@@ -88,3 +90,62 @@ class FaissVectorStore(BaseVectorStore):
 
     def __len__(self) -> int:
         return len(self._chunks)
+
+    # Persistence
+
+    def save(self, directory: str) -> None:
+        """
+        Save the FAISS index and chunk list to disk.
+
+        Creates two files inside {directory}:
+          faiss.index    — FAISS binary index (vectors only)
+          faiss_meta.pkl — pickled _chunks list + dim integer
+
+        Call this once after add_chunks() at ingestion time so the
+        store can be restored on the next program start without
+        re-embedding every chunk.
+        """
+        path = Path(directory)
+        path.mkdir(parents=True, exist_ok=True)
+
+        faiss.write_index(self.index, str(path / "faiss.index"))
+
+        with open(path / "faiss_meta.pkl", "wb") as f:
+            pickle.dump(
+                {"chunks": self._chunks, "dim": self.dim},
+                f,
+                protocol=pickle.HIGHEST_PROTOCOL,
+            )
+
+    @classmethod
+    def load(cls, directory: str) -> "FaissVectorStore":
+        """
+        Restore a FaissVectorStore previously saved with save().
+
+        Args
+        ----
+        directory : Directory that contains faiss.index and faiss_meta.pkl.
+
+        Returns
+        -------
+        Fully restored FaissVectorStore ready for similarity_search_by_vector().
+
+        Raises
+        ------
+        FileNotFoundError if faiss.index is not found in directory.
+        """
+        path = Path(directory)
+
+        if not (path / "faiss.index").exists():
+            raise FileNotFoundError(
+                f"No faiss.index found in '{directory}'. "
+                "Call save() before load()."
+            )
+
+        with open(path / "faiss_meta.pkl", "rb") as f:
+            data = pickle.load(f)
+
+        store         = cls(dim=int(data["dim"]))
+        store.index   = faiss.read_index(str(path / "faiss.index"))
+        store._chunks = data["chunks"]
+        return store
