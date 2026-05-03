@@ -1,20 +1,203 @@
 {
   "session_id": "interactive_session",
-  "next_id": 1,
+  "next_id": 11,
   "summary": "",
   "turns": [
     {
-      "turn_id": 0,
-      "user_query": "what is more important business or security?",
-      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\graphrag_library\\GraphRAG_Library\\utils\\output\\2_the_need_for_infosec1\\2_the_need_for_infosec1_text.txt)\nSelf-Assessment\n• Consider this statement:\n",
+      "turn_id": 1,
+      "user_query": "is it more important than business",
+      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\nThe digital transformation of business operations has made ",
       "retrieved_chunks": [
-        "124"
+        "7",
+        "6",
+        "37ba9d3f5a6acaaf",
+        "8",
+        "d87aeaca33d02cf8",
+        "2335f9427387f3a4",
+        "rel_2335f9427387f3a4_a9bd96fe2fc3f724_APPLIED_TO"
       ],
-      "timestamp": "2026-04-30T15:26:34.337030",
+      "timestamp": "2026-05-03T21:32:45.062570",
       "query_intent": "comparative",
       "entities": [
-        "Business",
-        "Security"
+        "Information Security",
+        "Business"
+      ]
+    },
+    {
+      "turn_id": 2,
+      "user_query": "why do we need infosec?",
+      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\nThe digital transformation of business operations has made ",
+      "retrieved_chunks": [
+        "7",
+        "6",
+        "10",
+        "8",
+        "22",
+        "4",
+        "9",
+        "2335f9427387f3a4",
+        "12",
+        "b7739ce36ae5dd7f"
+      ],
+      "timestamp": "2026-05-03T21:34:31.609569",
+      "query_intent": "factual",
+      "entities": [
+        "Information Security"
+      ]
+    },
+    {
+      "turn_id": 3,
+      "user_query": "what are its potential attacks?",
+      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\nTYPES OF ATTACKS AND THREATS\n==============================",
+      "retrieved_chunks": [
+        "14",
+        "rel_5380c8a87f397f21_c645995c5aeea8fb_SPECIAL_CASE_OF",
+        "c645995c5aeea8fb",
+        "4edbeaadc45266a0",
+        "45555d590f17f212",
+        "15",
+        "rel_5380c8a87f397f21_c645995c5aeea8fb_IMPLIES",
+        "5380c8a87f397f21",
+        "17",
+        "0cb7e9d16d6f756a"
+      ],
+      "timestamp": "2026-05-03T21:36:07.342170",
+      "query_intent": "follow_up",
+      "entities": [
+        "Information Security"
+      ]
+    },
+    {
+      "turn_id": 4,
+      "user_query": "how do we prevent them?",
+      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\nConfidentiality ensures that information is accessible only",
+      "retrieved_chunks": [
+        "9",
+        "22",
+        "12",
+        "d87aeaca33d02cf8",
+        "8",
+        "22cea8d174dc73cd",
+        "5"
+      ],
+      "timestamp": "2026-05-03T21:38:18.830992",
+      "query_intent": "procedural",
+      "entities": [
+        "Information Security"
+      ]
+    },
+    {
+      "turn_id": 5,
+      "user_query": "how to prevent infosec attacks?",
+      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\nUnderstand the three fundamental principles of information ",
+      "retrieved_chunks": [
+        "4",
+        "22",
+        "11",
+        "8",
+        "5",
+        "12",
+        "d87aeaca33d02cf8"
+      ],
+      "timestamp": "2026-05-03T21:41:52.839747",
+      "query_intent": "procedural",
+      "entities": [
+        "Information Security"
+      ]
+    },
+    {
+      "turn_id": 6,
+      "user_query": "what does infosec depend on?",
+      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\nThe digital transformation of business operations has made ",
+      "retrieved_chunks": [
+        "7",
+        "8",
+        "f9118d8938ebbd4c",
+        "22",
+        "d87aeaca33d02cf8",
+        "e8246614582f728f",
+        "37ba9d3f5a6acaaf",
+        "b7739ce36ae5dd7f",
+        "46c408eb3f46514e",
+        "5"
+      ],
+      "timestamp": "2026-05-03T21:45:19.873137",
+      "query_intent": "relational",
+      "entities": [
+        "Information Security"
+      ]
+    },
+    {
+      "turn_id": 7,
+      "user_query": "what does a threat imply?",
+      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\n[Concept] Threat\nA potential occurrence that could compromi",
+      "retrieved_chunks": [
+        "5380c8a87f397f21",
+        "14",
+        "0cb7e9d16d6f756a",
+        "22",
+        "71388bf90484de55",
+        "15"
+      ],
+      "timestamp": "2026-05-03T21:48:58.741251",
+      "query_intent": "factual",
+      "entities": [
+        "Threat",
+        "Information Security"
+      ]
+    },
+    {
+      "turn_id": 8,
+      "user_query": "what does a threat imply?",
+      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\n[Concept] Threat\nA potential occurrence that could compromi",
+      "retrieved_chunks": [
+        "5380c8a87f397f21",
+        "14",
+        "0cb7e9d16d6f756a",
+        "22",
+        "71388bf90484de55",
+        "15"
+      ],
+      "timestamp": "2026-05-03T21:50:11.269414",
+      "query_intent": "factual",
+      "entities": [
+        "Threat",
+        "Information Security"
+      ]
+    },
+    {
+      "turn_id": 9,
+      "user_query": "what is digital transformation?",
+      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\n[Concept] Digital Transformation\nThe integration of digital",
+      "retrieved_chunks": [
+        "ad94ff5f4eb39c9d",
+        "7",
+        "rel_ad94ff5f4eb39c9d_2335f9427387f3a4_DEPENDS_ON"
+      ],
+      "timestamp": "2026-05-03T21:50:52.447882",
+      "query_intent": "factual",
+      "entities": [
+        "Digital Transformation"
+      ]
+    },
+    {
+      "turn_id": 10,
+      "user_query": "what is an attack?",
+      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\n[Concept] Attack\nAn intentional or unintentional act that c",
+      "retrieved_chunks": [
+        "c645995c5aeea8fb",
+        "9136fd811da23eb2",
+        "45555d590f17f212",
+        "4edbeaadc45266a0",
+        "15",
+        "22"
+      ],
+      "timestamp": "2026-05-03T21:51:17.404142",
+      "query_intent": "factual",
+      "entities": [
+        "Attack",
+        "Information Security",
+        "Threat"
       ]
     }
   ]
