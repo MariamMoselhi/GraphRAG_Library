@@ -16,7 +16,6 @@ from .retrieval_context import (
 from .retrieval_logger  import RetrievalLogger
 from .memory_store      import MemoryStore
 from .query_cache       import QueryCache
-from .faiss_store       import FAISSStore
 from .query_processor   import QueryProcessor
 from .query_engine      import QueryEngine
 from .bm25_retriever    import BM25Retriever
@@ -46,7 +45,6 @@ __all__ = [
     "RetrievalLogger",
     "MemoryStore",
     "QueryCache",
-    "FAISSStore",
     "QueryProcessor",
     "QueryEngine",
     "BM25Retriever",
