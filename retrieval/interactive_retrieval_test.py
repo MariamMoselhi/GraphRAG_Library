@@ -689,18 +689,40 @@ def run_setup(cfg: dict) -> tuple:
     bm25        = None
     try:
         from embeddings.huggingFace import HuggingFaceEmbedding
+        # embed_model = HuggingFaceEmbedding(
+        #     model_name="sentence-transformers/all-MiniLM-L6-v2",
+        #     normalize=True,
+        # )
+        # ok(f"Embedding model loaded  (dim={embed_model.dimension})")
+
+        # from vectordb.faiss_store import FaissVectorStore
+        # faiss_store = FaissVectorStore(dim=embed_model.dimension, verbose=False)
+        # n = faiss_store.add_chunks(chunks)
+        # faiss_store.save(work_dir)
+        # ok(f"FAISS index built with {n} vectors and saved to {work_dir}")
         embed_model = HuggingFaceEmbedding(
             model_name="sentence-transformers/all-MiniLM-L6-v2",
             normalize=True,
         )
         ok(f"Embedding model loaded  (dim={embed_model.dimension})")
-
-        from retrieval.faiss_store import FAISSStore
-        faiss_store = FAISSStore(embed_model, verbose=False)
-        n = faiss_store.build_from_chunks(chunks)
+ 
+        from vectordb.faiss_store import FaissVectorStore
+ 
+        # FaissVectorStore follows the vectordb/base.py contract:
+        # embeddings must be stored in chunk.metadata["embedding"] BEFORE
+        # add_chunks() is called.  Embed all chunks now in one batched call.
+        info(f"Embedding {len(chunks)} chunks...")
+        texts   = [c.text for c in chunks]
+        vectors = embed_model.encode(texts)          # shape (N, dim)
+        for chunk, vec in zip(chunks, vectors):
+            chunk.metadata["embedding"] = vec
+ 
+        faiss_store = FaissVectorStore(dim=embed_model.dimension, verbose=False)
+        faiss_store.add_chunks(chunks)               # add_chunks returns None
         faiss_store.save(work_dir)
+        n = len(faiss_store)                         # correct count
         ok(f"FAISS index built with {n} vectors and saved to {work_dir}")
-
+ 
         from retrieval.bm25_retriever import BM25Retriever
         bm25 = BM25Retriever(verbose=False)
         bm25.build(chunks)
