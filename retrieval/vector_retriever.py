@@ -1,17 +1,17 @@
 """
 Vector (semantic) retriever for the GraphRAG pipeline.
 
-Wraps FAISSStore and runs approximate nearest-neighbour search using the
-query embedding produced by query_engine.py.
+Wraps FaissVectorStore (vectordb/faiss_store.py) and runs approximate
+nearest-neighbour search using the query embedding produced by query_engine.py.
 
 Why a separate wrapper module?
 -------------------------------
-FAISSStore is a storage layer; VectorRetriever is a retrieval *policy*.
+FaissVectorStore is a storage layer; VectorRetriever is a retrieval *policy*.
 Keeping them separate allows the retriever to:
   - Apply a minimum-score threshold (filter near-zero similarity results)
   - Log standardised PhaseStats and update RetrievalTrace
-  - Return RetrievedChunk objects (not raw FAISS tuples)
-  - Be swapped for a different ANN backend without touching FAISSStore
+  - Return RetrievedChunk objects (not raw RetrievalResult objects)
+  - Be swapped for a different ANN backend without touching FaissVectorStore
 """
 from __future__ import annotations
 
@@ -19,8 +19,10 @@ import time
 from typing import List, Optional
 
 from .retrieval_context import PhaseStats, QueryRepresentation, RetrievedChunk, RetrievalTrace
-from .faiss_store import FAISSStore
 from .retrieval_logger import RetrievalLogger
+
+# Use the project's canonical FaissVectorStore (vectordb/faiss_store.py)
+from vectordb.faiss_store import FaissVectorStore
 
 
 class VectorRetriever:
@@ -29,15 +31,15 @@ class VectorRetriever:
 
     Args
     ----
-    faiss_store     : Pre-built FAISSStore instance.
-    min_score       : Minimum cosine similarity to include a result (default 0.3).
-    logger          : RetrievalLogger instance.
-    verbose         : Print phase details.
+    faiss_store : Pre-built FaissVectorStore instance (vectordb package).
+    min_score   : Minimum cosine similarity to include a result (default 0.3).
+    logger      : RetrievalLogger instance.
+    verbose     : Print phase details.
     """
 
     def __init__(
         self,
-        faiss_store : FAISSStore,
+        faiss_store : FaissVectorStore,
         min_score   : float = 0.3,
         logger      : Optional[RetrievalLogger] = None,
         verbose     : bool  = True,
@@ -75,8 +77,25 @@ class VectorRetriever:
             self.logger.warn("No query embedding available — skipping vector search")
             return []
 
-        raw     = self.faiss_store.search(rep.embedding, top_k=top_k)
-        results = [r for r in raw if r.score >= self.min_score]
+        # FaissVectorStore.similarity_search_by_vector returns List[RetrievalResult]
+        raw_results = self.faiss_store.similarity_search_by_vector(
+            rep.embedding, k=top_k
+        )
+
+        # Convert RetrievalResult → RetrievedChunk and apply min_score filter
+        results: List[RetrievedChunk] = []
+        for rr in raw_results:
+            if rr.score < self.min_score:
+                continue
+            chunk = rr.chunk
+            results.append(RetrievedChunk(
+                chunk_id  = str(chunk.chunk_id),
+                text      = chunk.text,
+                source    = chunk.metadata.get("source", "unknown"),
+                score     = rr.score,
+                retriever = "vector",
+                metadata  = dict(chunk.metadata),
+            ))
 
         elapsed_ms = (time.time() - t0) * 1000
 
@@ -87,7 +106,7 @@ class VectorRetriever:
                 elapsed_ms   = elapsed_ms,
                 input_count  = 1,
                 output_count = len(results),
-                notes        = f"min_score={self.min_score}  index_size={self.faiss_store.total_vectors}",
+                notes        = f"min_score={self.min_score}  index_size={len(self.faiss_store)}",
             ))
 
         self.logger.print_vector_results(results)
