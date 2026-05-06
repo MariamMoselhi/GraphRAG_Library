@@ -389,7 +389,9 @@ def query_lecture(req: QueryRequest):
     try:
         answer_result = answer_gen.generate(
             graded_result  = graded_result,
-            pipeline       = pipeline,
+            pipeline       = None,      # cache already updated by RetrievalPipeline._run_once();
+                                        # passing pipeline here would double-put into cache.
+                                        # record_turn() is called separately below.
             original_query = req.query,
         )
         answer = answer_result.text
@@ -399,12 +401,18 @@ def query_lecture(req: QueryRequest):
             "Please try rephrasing your question."
         )
 
-    # ── Memory is handled inside generate() ──────────────────────────────────
-    # answer_gen.generate() always calls pipeline._record_turn() internally —
-    # both on success and on the FAIL_ANSWER path — so we must NOT call
-    # pipeline.record_turn() here. Doing so would double-record the turn.
-    # On the except path (generate() raised before completion), memory is
-    # left unchanged which is the safest behaviour.
+    # ── Record turn in this student's memory ─────────────────────────────────
+    # We pass pipeline=None to generate() to prevent the double cache.put,
+    # so generate() does NOT call record_turn() internally. We must call it here.
+    # Called in both the success and fallback paths so memory always advances.
+    try:
+        pipeline.record_turn(
+            user_query    = req.query,
+            ai_response   = answer,
+            graded_result = graded_result,
+        )
+    except Exception:
+        pass  # memory is best-effort; never crash the response
 
     # ── Save plain answer .txt ─────────────────────────────────────────────────
     answer_file = _save_answer_txt(
@@ -463,7 +471,7 @@ def _get_or_create_student_pipeline(student_session_id: str):
     try:
         from retrieval.retrieval_pipeline import RetrievalPipeline
         new_pipeline = RetrievalPipeline(
-            # Shared read-only resources
+            # Shared read-only resources (stateless — safe across students)
             embedding_model   = _lecture_state["embed_model"],
             graph_store       = _lecture_state["graph_store"],
             faiss_dir         = str(lecture_work_dir),
@@ -471,6 +479,12 @@ def _get_or_create_student_pipeline(student_session_id: str):
             # Per-student isolation
             session_id        = student_session_id,
             memory_dir        = str(student_dir),
+            # Per-student cache tuning
+            # Note: RetrievalPipeline does not expose a cache_file param so the
+            # QueryCache lives in-memory only (lost on process restart). Memory
+            # (MemoryStore) IS persisted to disk via memory_dir above.
+            cache_capacity    = 64,     # smaller per-student cache is enough
+            cache_threshold   = 0.95,
             # API keys
             whisper_api_key   = _KEY_WHISPER,
             query_llm_api_key = _KEY_QUERY,
