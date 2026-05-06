@@ -157,6 +157,7 @@ _lecture_state: dict = {
 # Protected by _students_lock for thread-safe creation on first query.
 _student_pipelines: Dict[str, object] = {}   # student_session_id → RetrievalPipeline
 _students_lock = threading.Lock()
+_index_lock    = threading.Lock()   # protects _append_index read-modify-write
 
 # ── FastAPI app ───────────────────────────────────────────────────────────────
 app = FastAPI(
@@ -312,13 +313,14 @@ async def ingest_lecture(
         raise HTTPException(status_code=500, detail=f"AnswerGenerator init failed: {exc}")
 
     # ── 8. Update shared lecture state + clear all student pipelines ──────────
-    _lecture_state["lecture_session_id"] = lecture_session_id
-    _lecture_state["lecture_work_dir"]   = lecture_work_dir
-    _lecture_state["embed_model"]        = embed_model
-    _lecture_state["graph_store"]        = graph_store
-    _lecture_state["answer_generator"]   = answer_gen
-
+    # Update atomically under _students_lock so a concurrent /query can never
+    # see a half-written _lecture_state (e.g. new graph_store, old session id).
     with _students_lock:
+        _lecture_state["lecture_session_id"] = lecture_session_id
+        _lecture_state["lecture_work_dir"]   = lecture_work_dir
+        _lecture_state["embed_model"]        = embed_model
+        _lecture_state["graph_store"]        = graph_store
+        _lecture_state["answer_generator"]   = answer_gen
         _student_pipelines = {}   # clear pipelines from previous lecture
 
     return IngestResponse(
@@ -397,18 +399,12 @@ def query_lecture(req: QueryRequest):
             "Please try rephrasing your question."
         )
 
-    # ── Record turn in this student's memory (best-effort) ────────────────────
-    # generate() already calls record_turn() internally when it succeeds.
-    # Only call it here for the fallback case where generate() raised.
-    if answer_result is None:
-        try:
-            pipeline.record_turn(
-                user_query    = req.query,
-                ai_response   = answer,
-                graded_result = graded_result,
-            )
-        except Exception:
-            pass  # memory is best-effort; never crash the response
+    # ── Memory is handled inside generate() ──────────────────────────────────
+    # answer_gen.generate() always calls pipeline._record_turn() internally —
+    # both on success and on the FAIL_ANSWER path — so we must NOT call
+    # pipeline.record_turn() here. Doing so would double-record the turn.
+    # On the except path (generate() raised before completion), memory is
+    # left unchanged which is the safest behaviour.
 
     # ── Save plain answer .txt ─────────────────────────────────────────────────
     answer_file = _save_answer_txt(
@@ -507,18 +503,31 @@ def _wipe_neo4j(graph_store) -> None:
         session.run("MATCH (n) DETACH DELETE n")
 
 
+_embed_model_cache      = None          # loaded once, never reset between lectures
+_embed_model_lock       = threading.Lock()
+
 def _get_embed_model():
     """
     Lazy-load the HuggingFace embedding model and cache it permanently.
-    The model is stateless and thread-safe — safe to share across students.
+
+    Uses a module-level cache (_embed_model_cache) that is NEVER cleared
+    between lectures — the model is stateless and the same across all
+    lectures, so reloading it on every /ingest would waste ~2 s for nothing.
+
+    Thread-safe: _embed_model_lock prevents a double-load race when two
+    requests call this simultaneously before the model is initialised.
     """
-    if _lecture_state["embed_model"] is None:
-        from embeddings.huggingFace import HuggingFaceEmbedding
-        _lecture_state["embed_model"] = HuggingFaceEmbedding(
-            model_name = "sentence-transformers/all-MiniLM-L6-v2",
-            normalize  = True,
-        )
-    return _lecture_state["embed_model"]
+    global _embed_model_cache
+    if _embed_model_cache is not None:
+        return _embed_model_cache
+    with _embed_model_lock:
+        if _embed_model_cache is None:   # re-check inside lock
+            from embeddings.huggingFace import HuggingFaceEmbedding
+            _embed_model_cache = HuggingFaceEmbedding(
+                model_name = "sentence-transformers/all-MiniLM-L6-v2",
+                normalize  = True,
+            )
+    return _embed_model_cache
 
 
 def _extract_text(file_path: str, suffix: str) -> str:
@@ -684,39 +693,40 @@ def _append_index(
     """
     index_path = INDEX_DIR / f"{lecture_session_id}.json"
 
-    # Load existing or initialise fresh
-    data: Optional[dict] = None
-    if index_path.exists():
-        try:
-            data = json.loads(index_path.read_text(encoding="utf-8"))
-        except (json.JSONDecodeError, OSError):
-            data = None  # corrupted file — rebuild cleanly
+    with _index_lock:   # prevent concurrent students corrupting the same file
+        # Load existing or initialise fresh
+        data: Optional[dict] = None
+        if index_path.exists():
+            try:
+                data = json.loads(index_path.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError):
+                data = None  # corrupted file — rebuild cleanly
 
-    if data is None:
-        data = {
+        if data is None:
+            data = {
+                "lecture_session_id" : lecture_session_id,
+                "created_at"         : datetime.utcnow().isoformat(timespec="seconds"),
+                "queries"            : [],
+            }
+
+        data["queries"].append({
             "lecture_session_id" : lecture_session_id,
-            "created_at"         : datetime.utcnow().isoformat(timespec="seconds"),
-            "queries"            : [],
-        }
+            "student_session_id" : student_session_id,
+            "timestamp"          : timestamp.isoformat(timespec="seconds"),
+            "query"              : query,
+            "answer_file"        : str(answer_file),
+        })
 
-    data["queries"].append({
-        "lecture_session_id" : lecture_session_id,
-        "student_session_id" : student_session_id,
-        "timestamp"          : timestamp.isoformat(timespec="seconds"),
-        "query"              : query,
-        "answer_file"        : str(answer_file),
-    })
-
-    # Atomic write
-    tmp_path = index_path.with_suffix(".tmp")
-    try:
-        tmp_path.write_text(
-            json.dumps(data, ensure_ascii=False, indent=2),
-            encoding="utf-8",
-        )
-        tmp_path.replace(index_path)
-    except OSError as exc:
-        print(f"[graphrag_api] WARNING: index write failed: {exc}")
+        # Atomic write
+        tmp_path = index_path.with_suffix(".tmp")
+        try:
+            tmp_path.write_text(
+                json.dumps(data, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+            tmp_path.replace(index_path)
+        except OSError as exc:
+            print(f"[graphrag_api] WARNING: index write failed: {exc}")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
