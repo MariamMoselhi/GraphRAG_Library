@@ -115,7 +115,6 @@ def _load_dotenv(env_path: Optional[str] = None) -> None:
 _load_dotenv()
 
 
-print("DEBUG KEY RAW:", repr(os.environ.get("GROQ_API_KEY_GENERATE")))
 # ──────────────────────────────────────────────────────────────────────────────
 # Constants
 # ──────────────────────────────────────────────────────────────────────────────

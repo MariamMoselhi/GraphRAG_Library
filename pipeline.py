@@ -305,7 +305,7 @@ async def ingest_lecture(
         from retrieval.answer_generator import AnswerGenerator
         answer_gen = AnswerGenerator(
             llm_api_key = _KEY_GENERATE,
-            output_dir  = str(ANSWERS_DIR),
+            output_dir  = None,   # disabled — graphrag_api._save_answer_txt handles saving
             verbose     = False,
         )
     except Exception as exc:
@@ -381,6 +381,8 @@ def query_lecture(req: QueryRequest):
         raise HTTPException(status_code=500, detail=f"Retrieval pipeline error: {exc}")
 
     # ── Answer generation ─────────────────────────────────────────────────────
+    # generate() returns an AnswerResult object; .text is the answer string.
+    # When pipeline is passed, generate() calls pipeline.record_turn() internally.
     answer_result = None
     try:
         answer_result = answer_gen.generate(
@@ -396,8 +398,8 @@ def query_lecture(req: QueryRequest):
         )
 
     # ── Record turn in this student's memory (best-effort) ────────────────────
-    # answer_gen.generate() calls pipeline.record_turn() internally when it
-    # succeeds.  Only call it here if generation failed and we have a fallback.
+    # generate() already calls record_turn() internally when it succeeds.
+    # Only call it here for the fallback case where generate() raised.
     if answer_result is None:
         try:
             pipeline.record_turn(
@@ -448,49 +450,51 @@ def _get_or_create_student_pipeline(student_session_id: str):
       - Their own QueryCache  (pickle file under students/<id>/)
       - Shared FAISS, BM25, and GraphStore (read-only, from _lecture_state)
 
-    Thread-safe: uses _students_lock for the creation path only.
+    Thread-safe: the lock is held only for the dict read/write, NOT during
+    the slow RetrievalPipeline construction. This prevents one slow student
+    init from blocking all other concurrent queries.
     """
-    # Fast path — no lock needed for reads on already-created pipelines
+    # Fast path — already exists, no lock needed
     if student_session_id in _student_pipelines:
         return _student_pipelines[student_session_id]
 
+    # Prepare paths before taking the lock (I/O outside critical section)
+    lecture_work_dir = _lecture_state["lecture_work_dir"]
+    student_dir      = lecture_work_dir / "students" / student_session_id
+    student_dir.mkdir(parents=True, exist_ok=True)
+
+    # Build pipeline outside the lock — construction is slow (loads models)
+    try:
+        from retrieval.retrieval_pipeline import RetrievalPipeline
+        new_pipeline = RetrievalPipeline(
+            # Shared read-only resources
+            embedding_model   = _lecture_state["embed_model"],
+            graph_store       = _lecture_state["graph_store"],
+            faiss_dir         = str(lecture_work_dir),
+            bm25_dir          = str(lecture_work_dir),
+            # Per-student isolation
+            session_id        = student_session_id,
+            memory_dir        = str(student_dir),
+            # API keys
+            whisper_api_key   = _KEY_WHISPER,
+            query_llm_api_key = _KEY_QUERY,
+            grader_api_key    = _KEY_GRADER,
+            # Behaviour
+            enable_retry      = True,
+            show_graph_viz    = False,
+            verbose           = False,
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code = 500,
+            detail      = f"Failed to create pipeline for student '{student_session_id}': {exc}",
+        )
+
+    # Lock only for the dict write — if two threads raced, keep the first winner
     with _students_lock:
-        # Re-check inside lock to handle concurrent first-query race
-        if student_session_id in _student_pipelines:
-            return _student_pipelines[student_session_id]
-
-        lecture_work_dir = _lecture_state["lecture_work_dir"]
-        student_dir      = lecture_work_dir / "students" / student_session_id
-        student_dir.mkdir(parents=True, exist_ok=True)
-
-        try:
-            from retrieval.retrieval_pipeline import RetrievalPipeline
-            pipeline = RetrievalPipeline(
-                # Shared read-only resources
-                embedding_model   = _lecture_state["embed_model"],
-                graph_store       = _lecture_state["graph_store"],
-                faiss_dir         = str(lecture_work_dir),   # shared index
-                bm25_dir          = str(lecture_work_dir),   # shared index
-                # Per-student isolation
-                session_id        = student_session_id,
-                memory_dir        = str(student_dir),         # private memory
-                # API keys
-                whisper_api_key   = _KEY_WHISPER,
-                query_llm_api_key = _KEY_QUERY,
-                grader_api_key    = _KEY_GRADER,
-                # Behaviour
-                enable_retry      = True,
-                show_graph_viz    = False,
-                verbose           = False,
-            )
-        except Exception as exc:
-            raise HTTPException(
-                status_code = 500,
-                detail      = f"Failed to create pipeline for student '{student_session_id}': {exc}",
-            )
-
-        _student_pipelines[student_session_id] = pipeline
-        return pipeline
+        if student_session_id not in _student_pipelines:
+            _student_pipelines[student_session_id] = new_pipeline
+        return _student_pipelines[student_session_id]
 
 
 # ─────────────────────────────────────────────────────────────────────────────
