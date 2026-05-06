@@ -1,0 +1,16 @@
+{
+  "resource_name": "2_the_need_for_infosec",
+  "resource_id": "2_the_need_for_infosec",
+  "filename": "2. The need for InfoSec.pdf",
+  "source_type": "pdf",
+  "upload_date": "2026-05-03T23:57:11.036494",
+  "extraction_timestamp": "2026-05-03T23:57:11.036511",
+  "file_size_bytes": 920277,
+  "processing_time_seconds": 0.21,
+  "status": "success",
+  "error_message": null,
+  "page_count": 79,
+  "character_count": 55505,
+  "is_encrypted": false,
+  "extracted_text_path": "C:\\Users\\Data-DCS\\OneDrive\\Desktop\\Ai\\GraphRAG_Library\\utils\\output\\2_the_need_for_infosec\\2_the_need_for_infosec_text.txt"
+}

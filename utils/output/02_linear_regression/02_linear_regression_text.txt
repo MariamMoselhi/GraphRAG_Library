@@ -1,0 +1,173 @@
+--- Page 1 ---
+Linear Regression
+
+--- Page 2 ---
+Regression
+Initially Given:
+– Data X =
+x (1), . . . , x (n )
+– Corresponding labels y = y(1), . . . , y(n )
+9
+8
+7
+6
+5
+4
+3
+2
+1
+0
+1975
+1980
+1985
+1990
+1995
+2000
+2005
+2010
+2015
+Year
+September Arctic Sea Ice Extent
+(1,000,000 sq km)
+Linear Regression
+Quadratic Regression
+Given an input 𝑿we
+would like to compute
+an output 𝒀
+Then
+
+--- Page 3 ---
+• Pearson correlation coefficient
+• Gradient Descent
+• Closed Form Solution
+Regression Techniques
+
+--- Page 4 ---
+Pearson correlation coefficient
+Measures the statistical association between two continuous variable
+
+--- Page 5 ---
+Linear regression equation
+Pearson correlation coefficient
+
+--- Page 6 ---
+Pearson correlation coefficient
+m -----------> slope
+X --------------> feature (input)
+b -------------------> y_intercept
+
+--- Page 7 ---
+m(slope) = r * (Sy / Sx )
+b = y – m x
+r = Pearson common factor,معامل برسون
+Sx= Standard deviation for x,
+االنحراف المعيارى
+Sy= Standard deviation for y,
+𝒔𝒚=
+𝒚− 𝒚𝟐
+𝑵−𝟏
+𝒔𝒙=
+𝒙− 𝒙𝟐
+𝑵−𝟏
+
+--- Page 8 ---
+How to calculate error value
+Cost function = Error function = Mean square error
+
+--- Page 9 ---
+Linear Regression
+
+--- Page 14 ---
+Intuition Behind Cost Function
+
+--- Page 15 ---
+Intuition Behind Cost Function
+(for fixed
+, this is a function of x)
+(function of the parameters
+)
+
+--- Page 16 ---
+Intuition Behind Cost Function
+(for fixed
+, this is a function of x)
+(function of the parameters
+)
+
+--- Page 17 ---
+Intuition Behind Cost Function
+(for fixed
+, this is a function of x)
+(function of the parameters
+)
+
+--- Page 18 ---
+Intuition Behind Cost Function
+(for fixed
+, this is a function of x)
+(function of the parameters
+)
+
+--- Page 26 ---
+Gradient Descent
+(for fixed
+, this is a function of x)
+(function of the parameters
+)
+h(x) = -900 – 0.1 x
+
+--- Page 27 ---
+Gradient Descent
+(for fixed
+, this is a function of x)
+(function of the parameters
+)
+
+--- Page 28 ---
+Gradient Descent
+(for fixed
+, this is a function of x)
+(function of the parameters
+)
+
+--- Page 29 ---
+Gradient Descent
+(for fixed
+, this is a function of x)
+(function of the parameters
+)
+
+--- Page 30 ---
+Gradient Descent
+(for fixed
+, this is a function of x)
+(function of the parameters
+)
+
+--- Page 31 ---
+Gradient Descent
+(for fixed
+, this is a function of x)
+(function of the parameters
+)
+
+--- Page 32 ---
+Gradient Descent
+(for fixed
+, this is a function of x)
+(function of the parameters
+)
+
+--- Page 33 ---
+Gradient Descent
+(for fixed
+, this is a function of x)
+(function of the parameters
+)
+
+--- Page 34 ---
+Gradient Descent
+(for fixed
+, this is a function of x)
+(function of the parameters
+)

@@ -1,0 +1,16 @@
+{
+  "resource_name": "csdd_l10_mobile_threats_and_cybersecurity",
+  "resource_id": "csdd_l10_mobile_threats_and_cybersecurity",
+  "filename": "CSDD_L10_Mobile Threats and Cybersecurity.pdf",
+  "source_type": "pdf",
+  "upload_date": "2026-05-05T02:04:07.042263",
+  "extraction_timestamp": "2026-05-05T02:04:07.042275",
+  "file_size_bytes": 1236477,
+  "processing_time_seconds": 0.06,
+  "status": "success",
+  "error_message": null,
+  "page_count": 18,
+  "character_count": 8960,
+  "is_encrypted": false,
+  "extracted_text_path": "C:\\Users\\Data-DCS\\OneDrive\\Desktop\\Ai\\GraphRAG_Library\\utils\\output\\csdd_l10_mobile_threats_and_cybersecurity\\csdd_l10_mobile_threats_and_cybersecurity_text.txt"
+}

@@ -1,0 +1,215 @@
+--- Page 1 ---
+Cybersecurity
+and Defense-
+in Depth
+ﺗﺟﻣﯾﻊ وإﻋداد:
+أﺣﻣد ﺣﺳﯾن
+Lecture 10
+9 December 2025
+
+--- Page 2 ---
+Lecture 10
+Mobile Threats and
+Cybersecurity
+
+--- Page 3 ---
+Importance of mobile devices
+• Business is increasingly conducted on mobile devices.
+• Organizations offer mobile applications to serve their customers.
+• While mobile applications are convenient, they introduce significant
+security risks when these applications are not continuously monitored
+for new vulnerabilities and potential threats.
+
+--- Page 4 ---
+Significance of mobile threats
+Example: My Fitness Pal data breach incident
+• About 150 million users have been affected by the Under Armour’s
+health and fitness tracking app “My Fitness Pal” data breach.
+• Unauthorized party gained information like usernames and email
+addresses for customers.
+• Public shares fell nearly 5% just days after the breach was
+announced.
+
+--- Page 5 ---
+Mobile Application Attacks
+• Device level attacks aim at mobile devices like smartphones and tablets,
+seeking to either access the network of the device or retrieve sensitive data
+saved on it.
+• Vulnerable binaries may be analyzed and reverse-engineered to produce
+duplicates or alter the original application's source code, undermining its
+integrity.
+• Insecure data storage is based on the belief that storing data on the client side
+is safe, yet attackers can employ tools to retrieve important information from
+these storage areas.
+
+--- Page 6 ---
+Mobile Application Attacks (Cont.)
+• Rooted Android or jailbroken iOS devices are susceptible to exploitation,
+granting attackers deeper access to the device’s system or enabling the
+installation of malicious apps.
+
+--- Page 7 ---
+Mobile-Specific Attack Vectors
+Mobile devices have some special features that results in new attacks that
+are different from attacks on computers.
+• Text Messages:
+• SMS messages is being employed by hackers to replace email messages as a
+means for their social engineering attacks.
+• Spam and phishing SMS messages are not usually filtered out as much as emails.
+So, SMS messages are ideal for spam and phishing attacks.
+• Users should be cautious about clicking a random link in an SMS text just as
+random links received by email.
+• Near Field Communication:
+• NFC could be used to attack a mobile device by beaming malicious payload to a
+vulnerable application on the device.
+• Users should be aware of which NFC tags their device responds to.
+
+--- Page 8 ---
+Mobile Attack Vectors (Cont.)
+• QR Codes:
+• QR codes could embed URLs, send data to an application on a mobile device, and
+so on.
+• QR codes could also be used to open malicious pages.
+• GPS:
+• Unencrypted location data could be exploited by attackers to acquire the location
+and GPS data off mobile users.
+• User’s location could present a larger risk of sophisticated social engineering
+attacks.
+
+--- Page 9 ---
+Common Mobile App
+Vulnerabilities
+Mobile applications could be prone to high severity vulnerabilities such as:
+• Broken SSL
+• Cert Validation Insecure
+• Data leakage
+• Privilege abuse
+• Unencrypted Device ID, Location Data, Credentials, Personally Identifiable
+Information (PII), …etc.
+• Credential theft
+• Vulnerable binaries.
+• The use of rooted Android or jailbroken iOS devices
+
+--- Page 10 ---
+Cybersecurity for mobile devices
+Cybersecurity for mobile devices presents unique challenges compared to
+traditional computers.
+• Portability and Accessibility:
+• Increased Risk: Mobile devices are constantly on the move, making them more
+susceptible to theft, loss, and exposure to different networks.
+• Remote Access: It is more common on mobile devices to remotely access
+sensitive data and applications. This increases the potential for unauthorized
+access if security measures are weak.
+• Diverse Operating Systems and App Stores:
+• Fragmentation: Mobile devices run on different operating systems (Android, iOS,
+…etc.), each OS has its own vulnerabilities and update cycles.
+• App Store Security: Applications downloaded from third-party app stores could
+introduce risks.
+
+--- Page 11 ---
+Cybersecurity for mobile devices
+(Cont.)
+• User Behavior and Awareness:
+• Less Cautious Usage: Mobile users often have less security awareness compared
+to desktop users, leading to careless habits such as selecting weak passwords,
+downloading from untrusted sources, and clicking on suspicious links.
+• Social Engineering Targets: Mobile devices are ideal targets for social
+engineering attacks, such as phishing scams and smishing (SMS phishing).
+• Hardware and Software Limitations:
+• Processing Power: Mobile devices have less processing power and memory
+compared to desktop and laptop computers. This limits the effectiveness of
+certain security solutions.
+• Battery Life: Security features like encryption and frequent scanning can drain
+battery faster which impacts user experience.
+
+--- Page 12 ---
+Cybersecurity for mobile devices
+(Cont.)
+• Evolving Threat Landscape:
+• Mobile-specific Threats: Cybercriminals are increasingly targeting mobile devices
+with malware, spyware, and other malicious attacks.
+• Rapid Development: The mobile environment is constantly progressing, with
+new devices, apps, and vulnerabilities emerging regularly.
+
+--- Page 13 ---
+Addressing mobile cybersecurity
+challenges
+To address mobile cybersecurity challenges, mobile cybersecurity requires
+a defense-in-depth approach, including:
+1. Strong Passwords and Biometric Authentication:
+• Use strong unique passwords.
+• Enable biometric authentication (fingerprint, facial recognition).
+2. Regular Software Updates:
+• Keep your device’s OS and apps updated to the latest versions to patch
+vulnerabilities.
+3. Secure Wi-Fi Connections:
+• Avoid public Wi-Fi networks for sensitive activities and use a VPN to encrypt your
+connection.
+
+--- Page 14 ---
+Addressing mobile cybersecurity
+challenges
+4. Mobile Security Software: Consider using a well-known mobile
+security software to protect against malware, phishing, and other
+threats.
+5. App Permissions: Avoid excessive permissions which can compromise
+your privacy and security. (A Calculator app doesn’t need to access
+your webcam!)
+6. Data Backups: Regularly back up your device’s data to protect against
+loss, theft, or ransomware attacks.
+7. User Awareness and Training: Stay informed about the latest mobile
+security threats and best practices. Mobile Security Software:
+Consider using reputable mobile security software to protect
+against malware, phishing, and other threats.
+
+--- Page 15 ---
+How businesses could mitigate
+mobile risks
+1. Mobile App Security: Companies ought to emphasize the security of their
+mobile applications by performing thorough vulnerability assessments,
+carrying out consistent code reviews, and employing strong data encryption
+techniques to effectively protect against possible threats.
+2.
+Authentication: Robust authentication techniques must be put in place to
+guarantee that only approved individuals have access to mobile applications.
+Implementing strict password policies is crucial in enhancing the security of
+the app.
+3.
+Employee Training: Providing employee training is crucial for fostering a
+workforce that prioritizes security. These programs teach staff about mobile
+security best practices, equipping them with the knowledge to identify and
+effectively react to potential threats
+
+--- Page 16 ---
+How businesses could mitigate
+mobile risks (Cont.)
+4. Network Security: It is essential to promote the use of secure and
+reliable Wi-Fi networks among employees for work-related tasks. This
+helps reduce the dangers linked to connecting to unprotected
+networks, which are frequently targeted by cybercriminals.
+5. Device Security: The implementation of Mobile Device Management
+(MDM) or Enterprise Mobility Management (EMM) solutions is
+essential. These solutions assist in securing the mobile devices utilized
+by staff, making certain that they comply with established security
+policies and configurations.
+6. Compliance: To prevent legal and regulatory issues, companies need
+to make sure that the development and use of mobile applications
+comply with regulations specific to their industry, including adherence
+to data protection and privacy laws relevant to the sector.
+
+--- Page 17 ---
+How businesses could mitigate
+mobile risks (Cont.)
+7. Privacy: Reviewing data collection and sharing practices is essential.
+Businesses should strive to align these practices with privacy
+regulations to protect user data and maintain trust.
+8. Monitoring: Consistently observing mobile app activity is essential for
+quickly detecting potential security breaches. This preventive strategy
+allows companies to respond rapidly should a security issue arise.
+9. Incident Response: Creating a comprehensive incident response
+strategy is crucial. This strategy must define explicit steps for quickly
+managing security breaches, reducing possible harm, and facilitating a
+rapid recovery process.
+
+--- Page 18 ---
+Questions?

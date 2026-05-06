@@ -1,0 +1,16 @@
+{
+  "resource_name": "02_linear_regression",
+  "resource_id": "02_linear_regression",
+  "filename": "02_linear regression.pdf",
+  "source_type": "pdf",
+  "upload_date": "2026-05-03T23:48:58.475089",
+  "extraction_timestamp": "2026-05-03T23:48:58.475107",
+  "file_size_bytes": 3725028,
+  "processing_time_seconds": 0.73,
+  "status": "success",
+  "error_message": null,
+  "page_count": 62,
+  "character_count": 2595,
+  "is_encrypted": false,
+  "extracted_text_path": "C:\\Users\\Data-DCS\\OneDrive\\Desktop\\Ai\\GraphRAG_Library\\utils\\output\\02_linear_regression\\02_linear_regression_text.txt"
+}
