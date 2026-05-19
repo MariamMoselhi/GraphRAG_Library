@@ -5,7 +5,7 @@ python-dotenv
 # Embeddings / vector search
 sentence-transformers
 faiss-cpu
-torch
+# torch
 
 # Graph extraction
 anthropic
@@ -22,9 +22,9 @@ beautifulsoup4
 groq
 
 # OCR / equation recognition
-easyocr
-Pillow
-pix2tex
+# easyocr
+# Pillow
+# pix2tex
 
 # Windows-only optional dependency for .ppt -> .pptx conversion
 pywin32
@@ -32,3 +32,15 @@ pywin32
 # Note:
 # This project also requires FFmpeg installed on your system PATH
 # for audio/video processing (not a pip package).
+
+
+fastapi
+uvicorn[standard]
+python-multipart
+
+#BM25 RETRIEVE
+rank-bm25
+
+#NEO4J GRAPH
+
+Neo4j
