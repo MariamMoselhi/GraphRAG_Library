@@ -129,6 +129,7 @@ _KEY_GENERATE = os.getenv("GROQ_API_KEY_GENERATE", "")
 _KEY_WHISPER  = os.getenv("GROQ_API_KEY_WHISPER",  "")
 _KEY_QUERY    = os.getenv("GROQ_API_KEY_QUERY",    "")
 _KEY_GRADER   = os.getenv("GROQ_API_KEY_GRADER",   "")
+_KEY_LLM = os.getenv("GROQ_API_KEY", "")
 
 # ── Neo4j connection ──────────────────────────────────────────────────────────
 _NEO4J_URI  = os.getenv("NEO4J_URI",      "neo4j://127.0.0.1:7687")
@@ -296,7 +297,8 @@ async def ingest_lecture(
             embed_model = embed_model,
             chunks      = chunks,
             graph_store = graph_store,
-            api_key     = _KEY_QUERY or _KEY_GRADER,
+            # api_key     = _KEY_QUERY or _KEY_GRADER,
+            api_key= _KEY_LLM
         )
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Graph build failed: {exc}")
@@ -514,7 +516,9 @@ def _get_or_create_student_pipeline(student_session_id: str):
 def _wipe_neo4j(graph_store) -> None:
     """Delete ALL nodes and relationships from Neo4j (full database wipe)."""
     with graph_store._driver.session() as session:
-        session.run("MATCH (n) DETACH DELETE n")
+        # session.run("MATCH (n) DETACH DELETE n")
+        session.run("MATCH ()-[r]->() DELETE r")
+        session.run("MATCH (n) DETACH DELETE n")  # ensure completion before proceeding
 
 
 _embed_model_cache      = None          # loaded once, never reset between lectures
