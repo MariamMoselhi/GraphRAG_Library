@@ -1,0 +1,13 @@
+SESSION   : interactive_session
+TIMESTAMP : 2026-06-19T22:41:53
+QUERY     : What is the algorithm of naive bias?
+VERDICT   : PASS
+SOURCES   : Naive Bayes Classifier Slides trinity openrouter edited.txt
+------------------------------------------------------------------------
+The Naive Bayes algorithm is based on Bayes' theorem, which provides a probabilistic framework for making predictions by modeling the joint probability distribution of features and classes. The algorithm models the joint probability distribution P(x,y) and uses this to compute posterior probabilities P(y|x) for classification. The key mathematical formulation of Naive Bayes is given by the equation P(y|x) = (P(x|y)P(y)/P(x)), where P(x|y) is the likelihood of observing the features given the class, P(y) is the prior probability of the class, and P(x) is the evidence or normalization constant.
+
+Under the naive assumption, P(x|y) is further simplified as Πi=1^n P(xi|y), assuming that features are conditionally independent given the class label. This simplification allows for efficient computation of the posterior probabilities. Parameter estimation in Naive Bayes uses maximum likelihood, and techniques like Laplace smoothing are employed to prevent zero probabilities.
+
+The Naive Bayes algorithm is particularly effective for text classification tasks, where it offers computational efficiency and strong performance even with limited training data. The algorithm can be implemented using different event models, such as Bernoulli or multinomial event models, to capture different aspects of how text data is generated.
+
+The key takeaway is that the Naive Bayes algorithm is a probabilistic framework based on Bayes' theorem, which models the joint probability distribution of features and classes to compute posterior probabilities for classification.
