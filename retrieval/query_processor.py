@@ -73,7 +73,7 @@ class QueryProcessor:
         self,
         whisper_api_key     : Optional[str]     = None,
         whisper_model       : str               = "whisper-large-v3-turbo",
-        whisper_language    : Optional[str]     = None,
+        whisper_language    : Optional[str]     = "en",
         whisper_temperature : float             = 0.0,
         memory_store        : Optional[MemoryStore] = None,
         memory_window       : int               = 3,
