@@ -1,204 +1,80 @@
 {
   "session_id": "interactive_session",
-  "next_id": 11,
+  "next_id": 4,
   "summary": "",
   "turns": [
     {
-      "turn_id": 1,
-      "user_query": "is it more important than business",
-      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\nThe digital transformation of business operations has made ",
+      "turn_id": 0,
+      "user_query": "What is the algorithm of naive bias?",
+      "ai_response": "The Naive Bayes algorithm is based on Bayes' theorem, which provides a probabilistic framework for making predictions by modeling the joint probability distribution of features and classes. The algorithm models the joint probability distribution P(x,y) and uses this to compute posterior probabilities P(y|x) for classification. The key mathematical formulation of Naive Bayes is given by the equation P(y|x) = (P(x|y)P(y)/P(x)), where P(x|y) is the likelihood of observing the features given the class, P(y) is the prior probability of the class, and P(x) is the evidence or normalization constant.\n\nUnder the naive assumption, P(x|y) is further simplified as Πi=1^n P(xi|y), assuming that features are conditionally independent given the class label. This simplification allows for efficient computation of the posterior probabilities. Parameter estimation in Naive Bayes uses maximum likelihood, and techniques like Laplace smoothing are employed to prevent zero probabilities.\n\nThe Naive Bayes algorithm is particularly effective for text classification tasks, where it offers computational efficiency and strong performance even with limited training data. The algorithm can be implemented using different event models, such as Bernoulli or multinomial event models, to capture different aspects of how text data is generated.\n\nThe key takeaway is that the Naive Bayes algorithm is a probabilistic framework based on Bayes' theorem, which models the joint probability distribution of features and classes to compute posterior probabilities for classification.",
       "retrieved_chunks": [
         "7",
-        "6",
-        "37ba9d3f5a6acaaf",
-        "8",
-        "d87aeaca33d02cf8",
-        "2335f9427387f3a4",
-        "rel_2335f9427387f3a4_a9bd96fe2fc3f724_APPLIED_TO"
+        "19",
+        "11",
+        "9"
       ],
-      "timestamp": "2026-05-03T21:32:45.062570",
-      "query_intent": "comparative",
+      "timestamp": "2026-06-19T22:41:53.572199",
+      "query_intent": "factual",
       "entities": [
-        "Information Security",
-        "Business"
-      ]
+        "Naive Bayes"
+      ],
+      "audio": true
+    },
+    {
+      "turn_id": 1,
+      "user_query": "What is Naive Baez?",
+      "ai_response": "Naive Bayes is a classification algorithm that is based on Bayes' theorem and provides a probabilistic framework for making predictions by modeling the joint probability distribution of features and classes. The algorithm is founded on the \"naive\" assumption that features are conditionally independent given the class label, which allows for efficient estimation of individual feature distributions for each class. This assumption simplifies the classification problem and makes Naive Bayes particularly effective for high-dimensional problems like text classification.\n\nThe mathematical foundation of Naive Bayes is rooted in Bayes' theorem, which states that the posterior probability of a class given the observed features can be computed by combining prior knowledge about the classes with the likelihood of observing the features given each class. The algorithm's simplicity and efficiency make it computationally efficient and easy to implement, especially for text classification tasks where the number of features can be very large.\n\nNaive Bayes can be implemented using different event models that capture various aspects of how text data is generated, making it a versatile and effective tool for text classification. Despite its simplicity, Naive Bayes often performs remarkably well in practice, particularly for text classification tasks, due to its ability to provide a probabilistic framework for making predictions.\n\nThe key takeaway is that Naive Bayes is a probabilistic classification algorithm based on Bayes' theorem, which assumes conditional independence of features given the class label, making it efficient and effective for high-dimensional problems like text classification.",
+      "retrieved_chunks": [
+        "11",
+        "7",
+        "9",
+        "14"
+      ],
+      "timestamp": "2026-06-19T22:43:12.716102",
+      "query_intent": "factual",
+      "entities": [
+        "Naive Bayes"
+      ],
+      "audio": true
     },
     {
       "turn_id": 2,
-      "user_query": "why do we need infosec?",
-      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\nThe digital transformation of business operations has made ",
+      "user_query": "Can naive bias be used in text classification?",
+      "ai_response": "Naive Bayes is indeed used in text classification, and it is particularly effective for this task due to its ability to handle high-dimensional feature spaces efficiently. The algorithm learns which words are characteristic of each category and can quickly classify new articles based on their word content. This makes it a popular choice for applications such as document categorization, sentiment analysis, and spam detection.\n\nThe naive assumption that features are conditionally independent given the class label allows Naive Bayes to simplify probability calculations and estimate individual feature distributions for each class. This results in a computationally efficient algorithm that requires fewer parameters to estimate, making it well-suited for text classification tasks where the number of features can be very large.\n\nNaive Bayes can be implemented using different event models, including Bernoulli and Multinomial models, which capture different aspects of how text data is generated. The algorithm models the joint probability distribution of features and classes, providing a probabilistic framework for making predictions. Its efficiency and interpretability make it a powerful tool for text classification, and it often performs remarkably well in practice, even with limited training data.\n\nThe key takeaway is that Naive Bayes is a highly effective algorithm for text classification tasks, offering a combination of computational efficiency, strong performance, and interpretability.",
       "retrieved_chunks": [
+        "11",
         "7",
-        "6",
-        "10",
-        "8",
-        "22",
-        "4",
-        "9",
-        "2335f9427387f3a4",
-        "12",
-        "b7739ce36ae5dd7f"
+        "5",
+        "17",
+        "18",
+        "19",
+        "16",
+        "9"
       ],
-      "timestamp": "2026-05-03T21:34:31.609569",
+      "timestamp": "2026-06-19T22:44:00.303472",
       "query_intent": "factual",
       "entities": [
-        "Information Security"
-      ]
+        "Naive Bayes"
+      ],
+      "audio": true
     },
     {
       "turn_id": 3,
-      "user_query": "what are its potential attacks?",
-      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\nTYPES OF ATTACKS AND THREATS\n==============================",
+      "user_query": "How can it be used to classify text?",
+      "ai_response": "Naive Bayes can be used to classify text by transforming the classification problem into estimating individual feature distributions for each class, which is computationally efficient and requires fewer parameters to estimate. This makes it particularly effective for high-dimensional problems like text classification, where the number of features, such as words, can be very large. The algorithm learns which words are characteristic of each category and can quickly classify new text based on their word content.\n\nIn the context of text classification, Naive Bayes can be implemented using different event models that capture different aspects of how text data is generated. For instance, news websites use Naive Bayes to automatically categorize articles into topics like sports, politics, technology, and entertainment. Similarly, social media platforms and review websites employ Naive Bayes for sentiment analysis, determining whether user comments or reviews express positive, negative, or neutral sentiments.\n\nThe power of Naive Bayes lies in its efficiency and interpretability, making it a powerful and efficient classification algorithm based on Bayes' theorem and the assumption of conditional independence between features given the class label. By applying the naive assumption of conditional independence, Naive Bayes can simplify probability calculations and handle high-dimensional feature spaces efficiently.\n\nNaive Bayes can be used to classify text by learning which words and phrases are associated with different categories or sentiments, and then classifying new text accordingly, providing valuable insights for businesses and content moderation, and the key takeaway is that Naive Bayes is a simple yet effective algorithm for text classification tasks.",
       "retrieved_chunks": [
-        "14",
-        "rel_5380c8a87f397f21_c645995c5aeea8fb_SPECIAL_CASE_OF",
-        "c645995c5aeea8fb",
-        "4edbeaadc45266a0",
-        "45555d590f17f212",
-        "15",
-        "rel_5380c8a87f397f21_c645995c5aeea8fb_IMPLIES",
-        "5380c8a87f397f21",
+        "11",
+        "7",
         "17",
-        "0cb7e9d16d6f756a"
+        "5",
+        "18"
       ],
-      "timestamp": "2026-05-03T21:36:07.342170",
+      "timestamp": "2026-06-19T22:44:37.604588",
       "query_intent": "follow_up",
       "entities": [
-        "Information Security"
-      ]
-    },
-    {
-      "turn_id": 4,
-      "user_query": "how do we prevent them?",
-      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\nConfidentiality ensures that information is accessible only",
-      "retrieved_chunks": [
-        "9",
-        "22",
-        "12",
-        "d87aeaca33d02cf8",
-        "8",
-        "22cea8d174dc73cd",
-        "5"
+        "Naive Bayes"
       ],
-      "timestamp": "2026-05-03T21:38:18.830992",
-      "query_intent": "procedural",
-      "entities": [
-        "Information Security"
-      ]
-    },
-    {
-      "turn_id": 5,
-      "user_query": "how to prevent infosec attacks?",
-      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\nUnderstand the three fundamental principles of information ",
-      "retrieved_chunks": [
-        "4",
-        "22",
-        "11",
-        "8",
-        "5",
-        "12",
-        "d87aeaca33d02cf8"
-      ],
-      "timestamp": "2026-05-03T21:41:52.839747",
-      "query_intent": "procedural",
-      "entities": [
-        "Information Security"
-      ]
-    },
-    {
-      "turn_id": 6,
-      "user_query": "what does infosec depend on?",
-      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\nThe digital transformation of business operations has made ",
-      "retrieved_chunks": [
-        "7",
-        "8",
-        "f9118d8938ebbd4c",
-        "22",
-        "d87aeaca33d02cf8",
-        "e8246614582f728f",
-        "37ba9d3f5a6acaaf",
-        "b7739ce36ae5dd7f",
-        "46c408eb3f46514e",
-        "5"
-      ],
-      "timestamp": "2026-05-03T21:45:19.873137",
-      "query_intent": "relational",
-      "entities": [
-        "Information Security"
-      ]
-    },
-    {
-      "turn_id": 7,
-      "user_query": "what does a threat imply?",
-      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\n[Concept] Threat\nA potential occurrence that could compromi",
-      "retrieved_chunks": [
-        "5380c8a87f397f21",
-        "14",
-        "0cb7e9d16d6f756a",
-        "22",
-        "71388bf90484de55",
-        "15"
-      ],
-      "timestamp": "2026-05-03T21:48:58.741251",
-      "query_intent": "factual",
-      "entities": [
-        "Threat",
-        "Information Security"
-      ]
-    },
-    {
-      "turn_id": 8,
-      "user_query": "what does a threat imply?",
-      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\n[Concept] Threat\nA potential occurrence that could compromi",
-      "retrieved_chunks": [
-        "5380c8a87f397f21",
-        "14",
-        "0cb7e9d16d6f756a",
-        "22",
-        "71388bf90484de55",
-        "15"
-      ],
-      "timestamp": "2026-05-03T21:50:11.269414",
-      "query_intent": "factual",
-      "entities": [
-        "Threat",
-        "Information Security"
-      ]
-    },
-    {
-      "turn_id": 9,
-      "user_query": "what is digital transformation?",
-      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\n[Concept] Digital Transformation\nThe integration of digital",
-      "retrieved_chunks": [
-        "ad94ff5f4eb39c9d",
-        "7",
-        "rel_ad94ff5f4eb39c9d_2335f9427387f3a4_DEPENDS_ON"
-      ],
-      "timestamp": "2026-05-03T21:50:52.447882",
-      "query_intent": "factual",
-      "entities": [
-        "Digital Transformation"
-      ]
-    },
-    {
-      "turn_id": 10,
-      "user_query": "what is an attack?",
-      "ai_response": "[1] (source: F:\\Engineering files\\4th Computer\\grad\\Lecture_Generator\\output\\TheNeed for Information Security Slides trinity openrouter.txt)\n[Concept] Attack\nAn intentional or unintentional act that c",
-      "retrieved_chunks": [
-        "c645995c5aeea8fb",
-        "9136fd811da23eb2",
-        "45555d590f17f212",
-        "4edbeaadc45266a0",
-        "15",
-        "22"
-      ],
-      "timestamp": "2026-05-03T21:51:17.404142",
-      "query_intent": "factual",
-      "entities": [
-        "Attack",
-        "Information Security",
-        "Threat"
-      ]
+      "audio": true
     }
   ]
 }
